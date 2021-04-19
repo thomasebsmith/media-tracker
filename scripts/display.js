@@ -6,7 +6,7 @@
 
     const headerRow = dom.create("tr");
     for (const column of data.columns) {
-      headerRow.appendChild(dom.create("td", {text: column.name}));
+      headerRow.appendChild(dom.create("th", {text: column.name}));
     }
     tableEl.appendChild(headerRow);
 
