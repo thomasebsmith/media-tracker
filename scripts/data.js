@@ -14,6 +14,10 @@
       name: "Creators",
       key: "creators",
     },
+    {
+      name: "Rating",
+      key: "rating",
+    },
   ];
 
   class Data {
