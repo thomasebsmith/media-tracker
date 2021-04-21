@@ -36,6 +36,14 @@
     drop(n) {
       return new Data(this.data.slice(n));
     }
+
+    // Sorts the data by columnKey, by default ascending.
+    sort(columnKey) {
+      const toBeSorted = this.data.slice();
+      toBeSorted.sort((a, b) => {
+        // if (a[columnKey] < 
+      }
+    }
   }
 
   const rows = new Data();
