@@ -42,7 +42,7 @@
       const toBeSorted = this.data.slice();
       toBeSorted.sort((a, b) => {
         // if (a[columnKey] < 
-      }
+      });
     }
   }
 
