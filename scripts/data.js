@@ -41,8 +41,15 @@
     sort(columnKey) {
       const toBeSorted = this.data.slice();
       toBeSorted.sort((a, b) => {
-        // if (a[columnKey] < 
+        if (a[columnKey] < b[columnKey]) {
+          return -1;
+        } else if (a[columnKey] > b[columnKey]) {
+          return 1;
+        } else {
+          return 0;
+        }
       });
+      return new Data(toBeSorted);
     }
   }
 
