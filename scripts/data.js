@@ -38,13 +38,14 @@
     }
 
     // Sorts the data by columnKey, by default ascending.
-    sort(columnKey) {
+    sort(columnKey, descending = false) {
       const toBeSorted = this.data.slice();
+      const reverseMultiplier = descending ? -1 : 1;
       toBeSorted.sort((a, b) => {
         if (a[columnKey] < b[columnKey]) {
-          return -1;
+          return -1 * reverseMultiplier;
         } else if (a[columnKey] > b[columnKey]) {
-          return 1;
+          return 1 * reverseMultiplier;
         } else {
           return 0;
         }
