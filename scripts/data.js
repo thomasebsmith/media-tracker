@@ -52,6 +52,10 @@
       });
       return new Data(toBeSorted);
     }
+
+    [Symbol.iterator]() {
+      return this.data[Symbol.iterator]();
+    }
   }
 
   const rows = new Data();
