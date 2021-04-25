@@ -1,0 +1,32 @@
+{
+  "name": "media-tracker",
+  "version": "0.0.1",
+  "description": "A website you can use to track the movies you watch, the books you read, and more",
+  "main": "",
+  "scripts": {
+    "build": "npm run clean && npm run build:babel && npm run build:bundle && npm run build:static && npm run build:final",
+    "build:babel": "npx tsc && npx babel src/scripts --out-dir build/babel/scripts --extensions '.ts,.tsx'",
+    "build:bundle": "npx browserify build/babel/scripts/index.js -o build/bundle/scripts/index.js",
+    "build:static": "mkdir -p build && cp -R static/ build/static",
+    "build:final": "cp -R build/static/ build/final && cp -R build/bundle/ build/final",
+    "clean": "rm -rf build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomasebsmith/media-tracker.git"
+  },
+  "author": "Thomas Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thomasebsmith/media-tracker/issues"
+  },
+  "homepage": "https://github.com/thomasebsmith/media-tracker#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.13.16",
+    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-typescript": "^7.13.0",
+    "browserify": "^17.0.0",
+    "typescript": "^4.2.4"
+  }
+}
