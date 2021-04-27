@@ -1,11 +1,45 @@
-import {columns, rows, Row, Sort} from "./data";
+import {columnKeys, columns, rows, Row, Sort} from "./data";
 import * as dom from "./dom";
+import {assert} from "./standard";
+
+const displayColumnKeys = columnKeys.filter(key => columns[key].display);
+const displayColumns = Object.values(columns).filter(col => col.display);
+
+function createTableCell(
+  text?: string,
+  options?: dom.CreateOptions
+): HTMLElement {
+  const colEl = dom.create("td", Object.assign({
+    editable: true,
+    spellcheck: false,
+    text: text,
+  }, options ?? {}));
+  return colEl;
+}
+
+function addRowForNewEntry(tableEl: HTMLElement) {
+  let thisIsLastRow = true;
+
+  const editRowEl = dom.create("tr", {classes: ["new"]});
+  for (let i = 0; i < displayColumnKeys.length; ++i) {
+    const colEl = createTableCell();
+    colEl.addEventListener("input", () => {
+      if (colEl.textContent !== "" && thisIsLastRow) {
+        thisIsLastRow = false;
+        addRowForNewEntry(tableEl);
+      }
+    });
+    editRowEl.appendChild(colEl);
+  }
+  tableEl.appendChild(editRowEl);
+
+}
 
 function display(containerEl: HTMLElement) {
   const tableEl = dom.create("table");
 
   const headerRow = dom.create("tr");
-  for (const column of Object.values(columns)) {
+  for (const column of displayColumns) {
     headerRow.appendChild(dom.create("th", {text: column.name}));
   }
   tableEl.appendChild(headerRow);
@@ -22,15 +56,21 @@ function display(containerEl: HTMLElement) {
   const dataToShow = rows.sort(sort).take(maxRows);
 
   for (const row of dataToShow) {
-    const rowEl = dom.create("tr");
+    const rowEl = dom.create("tr", {
+      data: {
+        id: `${row.id}`,
+      },
+    });
 
     // We need the `as` since TS doesn't support reflection.
-    for (const key of Object.keys(columns) as (keyof Row)[]) {
-      rowEl.appendChild(dom.create("td", {text: `${row[key]}`}));
+    for (const key of displayColumnKeys) {
+      rowEl.appendChild(createTableCell(`${row[key]}`));
     }
     tableEl.appendChild(rowEl);
   }
 
+  addRowForNewEntry(tableEl);
+  
   containerEl.appendChild(tableEl);
 }
 

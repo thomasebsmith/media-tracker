@@ -1,5 +1,11 @@
+type CreateData = {[key: string]: string|undefined};
+
 interface CreateOptions {
-  text?: string
+  classes?: string[],
+  data?: CreateData,
+  editable?: boolean|"true"|"false"|"inherit",
+  spellcheck?: boolean,
+  text?: string,
 }
 
 function create(
@@ -7,6 +13,26 @@ function create(
   options: CreateOptions = Object.create(null)
 ): HTMLElement {
   const el = document.createElement(type);
+  if (Array.isArray(options.classes)) {
+    for (const theClass of options.classes) {
+      el.classList.add(theClass);
+    }
+  }
+  if (typeof options.data === "object") {
+    for (const [key, value] of Object.entries(options.data)) {
+      if (typeof value === "string") {
+        el.dataset[key] = value;
+      }
+    }
+  }
+  if (typeof options.editable === "boolean") {
+    el.contentEditable = `${options.editable}`;
+  } else if (typeof options.editable === "string") {
+    el.contentEditable = options.editable;
+  }
+  if (typeof options.spellcheck === "boolean") {
+    el.spellcheck = options.spellcheck;
+  }
   if (typeof options.text === "string") {
     el.textContent = options.text;
   }
@@ -22,4 +48,4 @@ function selectAll(selector: string): HTMLElement[] {
 }
  
 export {create, select, selectAll};
-export type {CreateOptions};
+export type {CreateData, CreateOptions};

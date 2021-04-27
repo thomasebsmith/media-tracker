@@ -1,6 +1,7 @@
 import {getData} from "./storage";
 
 interface Row {
+  id: number,
   type: string,
   title: string,
   creators: string,
@@ -8,25 +9,36 @@ interface Row {
 }
 
 interface Column {
+  display: boolean,
   name: string,
 }
 
 type Sort = [key: keyof Row, descending: boolean][];
 
 const columns: {[key in keyof Row]: Column} = {
+  id: {
+    display: false,
+    name: "ID",
+  },
   type: {
+    display: true,
     name: "Type",
   },
   title: {
+    display: true,
     name: "Title",
   },
   creators: {
+    display: true,
     name: "Creators",
   },
   rating: {
+    display: true,
     name: "Rating",
   },
 };
+
+const columnKeys = Object.keys(columns) as (keyof Row)[];
 
 class Data {
   data: Row[];
@@ -72,5 +84,5 @@ class Data {
 
 const rows = new Data();
 
-export {columns, rows};
+export {columnKeys, columns, rows};
 export type {Column, Row, Sort};
