@@ -1,4 +1,4 @@
-import {columns, rows, Row} from "./data";
+import {columns, rows, Row, Sort} from "./data";
 import * as dom from "./dom";
 
 function display(containerEl: HTMLElement) {
@@ -11,10 +11,15 @@ function display(containerEl: HTMLElement) {
   tableEl.appendChild(headerRow);
 
   // TODO: Make this customizable.
-  const sortColumnKey = "title";
+  const sort: Sort = [
+    ["rating", true],
+    ["type", false],
+    ["title", false],
+    ["creators", false],
+  ];
   const maxRows = 100;
 
-  const dataToShow = rows.sort(sortColumnKey).take(maxRows);
+  const dataToShow = rows.sort(sort).take(maxRows);
 
   for (const row of dataToShow) {
     const rowEl = dom.create("tr");

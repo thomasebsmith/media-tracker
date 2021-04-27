@@ -11,6 +11,8 @@ interface Column {
   name: string,
 }
 
+type Sort = [key: keyof Row, descending: boolean][];
+
 const columns: {[key in keyof Row]: Column} = {
   type: {
     name: "Type",
@@ -45,18 +47,20 @@ class Data {
     return new Data(this.data.slice(n));
   }
 
-  // Sorts the data by columnKey, by default ascending.
-  sort(columnKey: keyof Row, descending: boolean = false) {
+  // Sorts the data, starting by the first (most important)
+  //  columns in columnKeys.
+  sort(columnKeys: Sort) {
     const toBeSorted = this.data.slice();
-    const reverseMultiplier = descending ? -1 : 1;
     toBeSorted.sort((a, b) => {
-      if (a[columnKey] < b[columnKey]) {
-        return -1 * reverseMultiplier;
-      } else if (a[columnKey] > b[columnKey]) {
-        return 1 * reverseMultiplier;
-      } else {
-        return 0;
+      for (const [key, descending] of columnKeys) {
+        const reverseMultiplier = descending ? -1 : 1;
+        if (a[key] < b[key]) {
+          return -1 * reverseMultiplier;
+        } else if (a[key] > b[key]) {
+          return 1 * reverseMultiplier;
+        }
       }
+      return 0;
     });
     return new Data(toBeSorted);
   }
@@ -69,4 +73,4 @@ class Data {
 const rows = new Data();
 
 export {columns, rows};
-export type {Column, Row};
+export type {Column, Row, Sort};
