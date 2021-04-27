@@ -8,3 +8,7 @@ All information is kept on your computer only for your privacy.
  - Record media
  - Rate media
  - Visualize your recorded media
+
+## Tech Stack
+Media Tracker is written in TypeScript and uses Babel and Browserify
+to compile its code to a static site.
