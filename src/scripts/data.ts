@@ -9,27 +9,22 @@ interface Row {
 
 interface Column {
   name: string,
-  key: keyof Row,
 }
 
-const columns: Column[] = [
-  {
+const columns: {[key in keyof Row]: Column} = {
+  type: {
     name: "Type",
-    key: "type",
   },
-  {
+  title: {
     name: "Title",
-    key: "title",
   },
-  {
+  creators: {
     name: "Creators",
-    key: "creators",
   },
-  {
+  rating: {
     name: "Rating",
-    key: "rating",
   },
-];
+};
 
 class Data {
   data: Row[];

@@ -3,7 +3,11 @@
     "target": "ES2015",
     "strict": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "lib": [
+      "es2020",
+      "DOM"
+    ]
   },
   "include": [
     "src"
