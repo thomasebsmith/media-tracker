@@ -70,44 +70,6 @@ function createTableCell(
     spellcheck: false,
     text: text,
   }, options ?? {}));
-
-  colEl.addEventListener("keydown", (event) => {
-    const selection = getSelection();
-    let isAtLeft = false;
-    let isAtRight = false;
-    if (selection !== null && selection.rangeCount === 1) {
-      const range = selection.getRangeAt(0);
-      if (range.startContainer == range.endContainer) {
-        const node = range.startContainer;
-        isAtLeft = range.startOffset === 0;
-        isAtRight = range.endOffset === node.textContent?.length ?? 0;
-      }
-    }
-
-    switch (event.key) {
-      case "ArrowUp":
-        move(0, -1);
-        event.preventDefault();
-        break;
-      case "ArrowDown":
-        move(0, 1);
-        event.preventDefault();
-        break;
-      case "ArrowLeft":
-        if (isAtLeft) {
-          move(-1, 0);
-          event.preventDefault();
-        }
-        break;
-      case "ArrowRight":
-        if (isAtRight) {
-          move(1, 0);
-          event.preventDefault();
-        }
-        break;
-    }
-  });
-
   return colEl;
 }
 
@@ -177,7 +139,6 @@ document.addEventListener("focusin", (event) => {
 
   const selection = getSelection();
   assert(selection !== null);
-  assert(selection.anchorNode !== null);
   selection.removeAllRanges();
 
   assert(cell.childNodes.length <= 1);
@@ -188,6 +149,63 @@ document.addEventListener("focusin", (event) => {
   range.setStart(toFocus, 0);
   range.setEnd(toFocus, toFocus.textContent?.length ?? 0);
   selection.addRange(range);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.shiftKey) {
+    return;
+  }
+
+  if (!(event.target instanceof HTMLElement) ||
+      event.target.tagName.toLowerCase() !== "td") {
+    return;
+  }
+
+  const selection = getSelection();
+  let isAtLeft = false;
+  let isAtRight = false;
+  if (selection !== null && selection.rangeCount === 1) {
+    const range = selection.getRangeAt(0);
+    if (range.startContainer == range.endContainer) {
+      const node = range.startContainer;
+      isAtLeft = range.startOffset === 0;
+      isAtRight = range.endOffset === node.textContent?.length ?? 0;
+    }
+  }
+
+  switch (event.key) {
+    case "ArrowUp":
+      move(0, -1);
+      event.preventDefault();
+      break;
+    case "ArrowDown":
+      move(0, 1);
+      event.preventDefault();
+      break;
+    case "ArrowLeft":
+      if (isAtLeft) {
+        move(-1, 0);
+        event.preventDefault();
+      }
+      break;
+    case "ArrowRight":
+      if (isAtRight) {
+        move(1, 0);
+        event.preventDefault();
+      }
+      break;
+    case "Enter":
+      move(0, 1);
+      event.preventDefault();
+      break;
+    case "Escape":
+      selection?.removeAllRanges();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      event.preventDefault();
+      break;
+  }
 });
 
 export default display;
