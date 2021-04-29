@@ -17,6 +17,7 @@ tr {
 }
 
 th {
+  background: #F0F0F0;
   cursor: default;
 }
 
@@ -27,6 +28,7 @@ th, td {
 
 td:focus {
   outline: 1.5px solid black;
+  outline-offset: -0.75px;
 }
 
 /* Dark mode colors */
@@ -34,6 +36,10 @@ td:focus {
   :root {
     background: #181818;
     color: #EEEEEE;
+  }
+
+  th {
+    background: #303030;
   }
 
   th, td {

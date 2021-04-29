@@ -5,6 +5,62 @@ import {assert} from "./standard";
 const displayColumnKeys = columnKeys.filter(key => columns[key].display);
 const displayColumns = Object.values(columns).filter(col => col.display);
 
+const numHeaderRows = 1;
+
+/*
+ * Moves the user's selection at most rightOffset cells to the right and
+ * at most downOffset cells downward, if the user has a cell selected.
+ *
+ * Note: Moves may occur by other means, e.g. if the user presses [tab].
+ */
+function move(rightOffset: number, downOffset: number) {
+  rightOffset = Math.round(rightOffset);
+  downOffset = Math.round(downOffset);
+
+  const selectedCell = document.activeElement;
+  if (selectedCell === null ||
+      selectedCell.tagName.toLowerCase() !== "td") {
+    return;
+  }
+
+  const containingRow = selectedCell.parentElement;
+  assert(containingRow !== null);
+  assert(containingRow.tagName.toLowerCase() === "tr");
+
+  let columnNum = Array.prototype.indexOf.call(
+    containingRow.children,
+    selectedCell
+  );
+  assert(columnNum !== -1);
+
+  const containingTable = containingRow.parentElement;
+  assert(containingTable !== null);
+  assert(containingTable.tagName.toLowerCase() === "table");
+
+  let rowNum = Array.prototype.indexOf.call(
+    containingTable.children,
+    containingRow
+  );
+  assert(rowNum !== -1);
+
+  columnNum += rightOffset;
+  rowNum += downOffset;
+
+  // Constrain rowNum to the existing rows (and not the header row).
+  rowNum = Math.min(containingTable.children.length - 1, rowNum);
+  rowNum = Math.max(numHeaderRows, rowNum);
+  const newRow = containingTable.children[rowNum];
+
+  // Constrain columnNum to existing columns.
+  columnNum = Math.min(newRow.children.length - 1, columnNum);
+  columnNum = Math.max(0, columnNum);
+  const newCell = newRow.children[columnNum];
+
+  assert(newCell instanceof HTMLElement);
+  assert(newCell.tagName.toLowerCase() === "td");
+  newCell.focus();
+}
+
 function createTableCell(
   text?: string,
   options?: dom.CreateOptions
@@ -14,6 +70,40 @@ function createTableCell(
     spellcheck: false,
     text: text,
   }, options ?? {}));
+
+  colEl.addEventListener("keydown", (event) => {
+    const selection = getSelection();
+    let isAtLeft = false;
+    let isAtRight = false;
+    if (selection !== null && selection.rangeCount === 1) {
+      const range = selection.getRangeAt(0);
+      if (range.startContainer == range.endContainer) {
+        const node = range.startContainer;
+        isAtLeft = range.startOffset === 0;
+        isAtRight = range.endOffset === node.textContent?.length ?? 0;
+      }
+    }
+
+    switch (event.key) {
+      case "ArrowUp":
+        move(0, -1);
+        break;
+      case "ArrowDown":
+        move(0, 1);
+        break;
+      case "ArrowLeft":
+        if (isAtLeft) {
+          move(-1, 0);
+        }
+        break;
+      case "ArrowRight":
+        if (isAtRight) {
+          move(1, 0);
+        }
+        break;
+    }
+  });
+
   return colEl;
 }
 
