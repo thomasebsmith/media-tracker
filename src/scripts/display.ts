@@ -87,18 +87,22 @@ function createTableCell(
     switch (event.key) {
       case "ArrowUp":
         move(0, -1);
+        event.preventDefault();
         break;
       case "ArrowDown":
         move(0, 1);
+        event.preventDefault();
         break;
       case "ArrowLeft":
         if (isAtLeft) {
           move(-1, 0);
+          event.preventDefault();
         }
         break;
       case "ArrowRight":
         if (isAtRight) {
           move(1, 0);
+          event.preventDefault();
         }
         break;
     }
@@ -163,5 +167,27 @@ function display(containerEl: HTMLElement) {
   
   containerEl.appendChild(tableEl);
 }
+
+document.addEventListener("focusin", (event) => {
+  const cell = event.target;
+  if (!(cell instanceof HTMLElement) ||
+      cell.tagName.toLowerCase() !== "td") {
+    return;
+  }
+
+  const selection = getSelection();
+  assert(selection !== null);
+  assert(selection.anchorNode !== null);
+  selection.removeAllRanges();
+
+  assert(cell.childNodes.length <= 1);
+  const toFocus =
+    cell.childNodes.length === 0 ? cell : cell.childNodes[0];
+
+  const range = document.createRange();
+  range.setStart(toFocus, 0);
+  range.setEnd(toFocus, toFocus.textContent?.length ?? 0);
+  selection.addRange(range);
+});
 
 export default display;
