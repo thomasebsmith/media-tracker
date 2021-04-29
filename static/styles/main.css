@@ -1,5 +1,7 @@
 /* Page-wide styles */
 :root {
+  background: white;
+  color: black;
   font-family: "Arial", "Helvetica", sans-serif;
 }
 
@@ -21,4 +23,24 @@ th {
 th, td {
   border: 1px solid lightgray;
   padding: 5px;
+}
+
+td:focus {
+  outline: 1.5px solid black;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    background: #181818;
+    color: #EEEEEE;
+  }
+
+  th, td {
+    border-color: #444444;
+  }
+
+  td:focus {
+    outline-color: #C8C8C8;
+  }
 }
