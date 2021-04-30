@@ -1,7 +1,8 @@
-import {getData} from "./storage";
+import {assert} from "./standard";
+import {getData, setData} from "./storage";
 
 interface Row {
-  id: number,
+  readonly id: number,
   type: string,
   title: string,
   creators: string,
@@ -40,12 +41,34 @@ const columns: {[key in keyof Row]: Column} = {
 
 const columnKeys = Object.keys(columns) as (keyof Row)[];
 
+const dataArray = getData();
+const dataIDMap = new Map();
+for (let i = 0; i < dataArray.length; ++i) {
+  dataIDMap.set(dataArray[i].id, i);
+}
+
+function updateRow(row: Row) {
+  const index = dataIDMap.get(row.id);
+  if (index !== undefined) {
+    // Clients of this module should *not* replace existing Row objects.
+    // Row objects must be modified in place.
+    assert(dataArray[index] == row);
+  } else {
+    const newIndex = dataArray.push(row) - 1;
+    dataIDMap.set(row.id, newIndex);
+  }
+}
+
+function saveUpdates() {
+  setData(dataArray);
+}
+
 class Data {
   data: Row[];
 
   constructor(data: Row[] | null = null) {
     if (data === null) {
-      this.data = getData();
+      this.data = dataArray;
     } else {
       this.data = data;
     }
@@ -75,6 +98,13 @@ class Data {
       return 0;
     });
     return new Data(toBeSorted);
+  }
+
+  update() {
+    for (const row of this.data) {
+      updateRow(row);
+    }
+    saveUpdates();
   }
 
   [Symbol.iterator]() {

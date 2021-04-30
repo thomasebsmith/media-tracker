@@ -39,6 +39,48 @@ function create(
   return el;
 }
 
+function findAncestorElement(
+  node: Node,
+  selector: string
+): Element | null {
+  let traversalNode: Node | null = node;
+  do {
+    if (traversalNode instanceof Element) {
+      return traversalNode.closest(selector);
+    }
+    traversalNode = traversalNode.parentNode;
+  } while (traversalNode !== null);
+  return null;
+}
+
+function isLeftmost(node: Node, inNode: Node): boolean {
+  let traversalNode: Node | null = node;
+  do {
+    if (traversalNode === inNode) {
+      return true;
+    }
+    if (traversalNode.previousSibling !== null) {
+      return false;
+    }
+    traversalNode = traversalNode.parentNode;
+  } while (traversalNode !== null);
+  return false;
+}
+
+function isRightmost(node: Node, inNode: Node): boolean {
+  let traversalNode: Node | null = node;
+  do {
+    if (traversalNode === inNode) {
+      return true;
+    }
+    if (traversalNode.nextSibling !== null) {
+      return false;
+    }
+    traversalNode = traversalNode.parentNode;
+  } while (traversalNode !== null);
+  return false;
+}
+
 function select(selector: string): HTMLElement | null {
   return document.querySelector(selector);
 }
@@ -47,5 +89,12 @@ function selectAll(selector: string): HTMLElement[] {
   return Array.from(document.querySelectorAll(selector));
 }
  
-export {create, select, selectAll};
+export {
+  create,
+  findAncestorElement,
+  isLeftmost,
+  isRightmost,
+  select,
+  selectAll
+};
 export type {CreateData, CreateOptions};

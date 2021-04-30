@@ -106,6 +106,7 @@ function display(containerEl: HTMLElement) {
     ["type", false],
     ["title", false],
     ["creators", false],
+    ["id", false],
   ];
   const maxRows = 100;
 
@@ -118,7 +119,6 @@ function display(containerEl: HTMLElement) {
       },
     });
 
-    // We need the `as` since TS doesn't support reflection.
     for (const key of displayColumnKeys) {
       rowEl.appendChild(createTableCell(`${row[key]}`));
     }
@@ -137,18 +137,15 @@ document.addEventListener("focusin", (event) => {
     return;
   }
 
-  const selection = getSelection();
-  assert(selection !== null);
-  selection.removeAllRanges();
+  if (cell.textContent !== null && cell.textContent?.length !== 0) {
+    const selection = getSelection();
+    assert(selection !== null);
+    selection.removeAllRanges();
 
-  assert(cell.childNodes.length <= 1);
-  const toFocus =
-    cell.childNodes.length === 0 ? cell : cell.childNodes[0];
-
-  const range = document.createRange();
-  range.setStart(toFocus, 0);
-  range.setEnd(toFocus, toFocus.textContent?.length ?? 0);
-  selection.addRange(range);
+    const range = document.createRange();
+    range.selectNodeContents(cell);
+    selection.addRange(range);
+  }
 });
 
 document.addEventListener("keydown", (event) => {
@@ -166,10 +163,32 @@ document.addEventListener("keydown", (event) => {
   let isAtRight = false;
   if (selection !== null && selection.rangeCount === 1) {
     const range = selection.getRangeAt(0);
-    if (range.startContainer == range.endContainer) {
-      const node = range.startContainer;
-      isAtLeft = range.startOffset === 0;
-      isAtRight = range.endOffset === node.textContent?.length ?? 0;
+    const containingTD = dom.findAncestorElement(
+      range.commonAncestorContainer,
+      "td"
+    );
+    if (containingTD !== null) {
+      isAtLeft = range.startOffset === 0 && dom.isLeftmost(
+        range.startContainer,
+        containingTD
+      );
+      const end = range.endContainer;
+      if (end instanceof Text ||
+          end instanceof Comment ||
+          end instanceof CDATASection) {
+        isAtRight = range.endOffset === end.textContent?.length ?? 0;
+      } else {
+        let minEndOffset = end.childNodes.length;
+        for (let i = end.childNodes.length - 1; i >= 0; --i) {
+          if ((end.childNodes[i]?.textContent ?? "") === "") {
+            --minEndOffset;
+          } else {
+            break;
+          }
+        }
+        isAtRight = range.endOffset >= minEndOffset;
+      }
+      isAtRight &&= dom.isRightmost(end, containingTD);
     }
   }
 
