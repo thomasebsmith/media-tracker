@@ -19,7 +19,7 @@ $(BUILD_DIR): $(RELEASE_DIR) $(DEBUG_DIR)
 $(RELEASE_DIR): $(RELEASE_DIR)/final
 $(DEBUG_DIR): $(DEBUG_DIR)/final
 
-$(RELEASE_DIR)/final: $(RELEASE_DIR)/static $(RELEASE_DIR)/bundle
+$(RELEASE_DIR)/final: $(RELEASE_DIR)/static $(RELEASE_DIR)/minified
 	for src in $^; do \
 		cp -R "$$src/." $@; \
 	done
@@ -35,20 +35,19 @@ $(DEBUG_DIR)/static: $(STATIC_DIR)
 	mkdir -p $@
 	cp -R $</. $@
 
-$(RELEASE_DIR)/bundle: $(RELEASE_DIR)/babel
-	npx browserify $</scripts/$(MAIN_SCRIPT).js \
-		-o $@/scripts/$(MAIN_SCRIPT).js
-$(DEBUG_DIR)/bundle: $(DEBUG_DIR)/babel
-	npx browserify $</scripts/$(MAIN_SCRIPT).js \
-		-o $@/scripts/$(MAIN_SCRIPT).js --debug
+$(RELEASE_DIR)/minified: $(RELEASE_DIR)/bundle
+	mkdir -p $@/scripts
+	npx uglifyjs --compress --mangle -o $@/scripts/$(MAIN_SCRIPT).js \
+		-- $</scripts/$(MAIN_SCRIPT).js
 
-$(RELEASE_DIR)/babel: $(SCRIPTS)
-	npx tsc
-	npx babel $(SCRIPTS_DIR) --out-dir $@/scripts --extensions '.ts,.tsx'
-$(DEBUG_DIR)/babel: $(SCRIPTS)
-	npx tsc
-	npx babel $(SCRIPTS_DIR) --out-dir $@/scripts \
-		--extensions '.ts,.tsx' --source-maps inline
+$(RELEASE_DIR)/bundle: $(SCRIPTS)
+	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
+		-t [ babelify --extensions '.ts,.tsx' ] \
+		-o $@/scripts/$(MAIN_SCRIPT).js
+$(DEBUG_DIR)/bundle: $(SCRIPTS)
+	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
+		-t [ babelify --extensions '.ts,.tsx' ] \
+		-o $@/scripts/$(MAIN_SCRIPT).js --debug
 
 .PHONY: clean
 clean:
