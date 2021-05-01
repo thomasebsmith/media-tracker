@@ -4,12 +4,7 @@
   "description": "A website you can use to track the movies you watch, the books you read, and more",
   "main": "",
   "scripts": {
-    "build": "npm run clean && npm run build:babel && npm run build:bundle && npm run build:static && npm run build:final",
-    "build:babel": "npx tsc && npx babel src/scripts --out-dir build/babel/scripts --extensions '.ts,.tsx'",
-    "build:bundle": "npx browserify build/babel/scripts/index.js -o build/bundle/scripts/index.js",
-    "build:static": "mkdir -p build && cp -R static/. build/static",
-    "build:final": "cp -R build/static/. build/final && cp -R build/bundle/. build/final",
-    "clean": "rm -rf build"
+    "build": "make build"
   },
   "repository": {
     "type": "git",

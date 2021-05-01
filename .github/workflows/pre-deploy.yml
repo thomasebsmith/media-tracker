@@ -35,13 +35,13 @@ jobs:
         run: npm install
 
       - name: Build the static site
-        run: npm run build
+        run: make build/release
         
       - name: Deploy to GitHub pages
         if: ${{ success() }}
         uses: crazy-max/ghaction-github-pages@b8f8d291c97fe0edd9fb4ee73018163593418e8f
         with:
           target_branch: gh-pages
-          build_dir: build/final
+          build_dir: build/release/final
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
