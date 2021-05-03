@@ -41,10 +41,12 @@ $(RELEASE_DIR)/minified: $(RELEASE_DIR)/bundle
 		-- $</scripts/$(MAIN_SCRIPT).js
 
 $(RELEASE_DIR)/bundle: $(SCRIPTS)
+	npx tsc
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js
 $(DEBUG_DIR)/bundle: $(SCRIPTS)
+	npx tsc
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js --debug

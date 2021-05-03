@@ -9,6 +9,13 @@ All information is kept on your computer only for your privacy.
  - Rate media
  - Visualize your recorded media
 
+## Quick Start
+```sh
+$ make build/release
+$ cd build/release/final
+$ python3 -m http.server 8000
+```
+
 ## Tech Stack
 Media Tracker is written in TypeScript and uses Babel and Browserify
 to compile its code to a static site.
