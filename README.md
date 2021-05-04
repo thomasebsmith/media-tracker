@@ -9,8 +9,16 @@ All information is kept on your computer only for your privacy.
  - Rate media
  - Visualize your recorded media
 
+## Requirements
+ - `git`
+ - `npm` + `node`
+ - `make`
+
 ## Quick Start
 ```sh
+$ git clone https://github.com/thomasebsmith/media-tracker.git
+$ cd media-tracker/
+$ npm install
 $ make build/release
 $ cd build/release/final
 $ python3 -m http.server 8000
