@@ -20,32 +20,41 @@ $(RELEASE_DIR): $(RELEASE_DIR)/final
 $(DEBUG_DIR): $(DEBUG_DIR)/final
 
 $(RELEASE_DIR)/final: $(RELEASE_DIR)/static $(RELEASE_DIR)/minified
+	rm -rf $@
+	mkdir -p $@
 	for src in $^; do \
 		cp -R "$$src/." $@; \
 	done
 $(DEBUG_DIR)/final: $(DEBUG_DIR)/static $(DEBUG_DIR)/bundle
+	rm -rf $@
+	mkdir -p $@
 	for src in $^; do \
 		cp -R "$$src/." $@; \
 	done
 
 $(RELEASE_DIR)/static: $(STATIC_DIR)
+	rm -rf $@
 	mkdir -p $@
 	cp -R $</. $@
 $(DEBUG_DIR)/static: $(STATIC_DIR)
+	rm -rf $@
 	mkdir -p $@
 	cp -R $</. $@
 
 $(RELEASE_DIR)/minified: $(RELEASE_DIR)/bundle
+	rm -rf $@
 	mkdir -p $@/scripts
 	npx uglifyjs --compress --mangle -o $@/scripts/$(MAIN_SCRIPT).js \
 		-- $</scripts/$(MAIN_SCRIPT).js
 
 $(RELEASE_DIR)/bundle: $(SCRIPTS)
+	rm -rf $@
 	npx tsc
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js
 $(DEBUG_DIR)/bundle: $(SCRIPTS)
+	rm -rf $@
 	npx tsc
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
