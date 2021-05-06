@@ -74,17 +74,19 @@ function createTableCell(
 }
 
 function addRowForNewEntry(tableEl: HTMLElement) {
-  let thisIsLastRow = true;
-
   const editRowEl = dom.create("tr", {classes: ["new"]});
+  const listener = (event: Event) => {
+    assert(event.target instanceof HTMLElement);
+    if (event.target.textContent !== "") {
+      editRowEl.classList.remove("new");
+      addRowForNewEntry(tableEl);
+      editRowEl.removeEventListener("input", listener);
+    }
+  };
+  editRowEl.addEventListener("input", listener);
+
   for (let i = 0; i < displayColumnKeys.length; ++i) {
     const colEl = createTableCell();
-    colEl.addEventListener("input", () => {
-      if (colEl.textContent !== "" && thisIsLastRow) {
-        thisIsLastRow = false;
-        addRowForNewEntry(tableEl);
-      }
-    });
     editRowEl.appendChild(colEl);
   }
   tableEl.appendChild(editRowEl);
@@ -110,7 +112,11 @@ function display(containerEl: HTMLElement) {
   ];
   const maxRows = 100;
 
-  const dataToShow = rows.sort(sort).take(maxRows);
+  let dataToShow = rows.sort(sort).take(maxRows);
+
+  function addRow(row: Row) {
+    dataToShow = dataToShow.append(row);
+  }
 
   for (const row of dataToShow) {
     const rowEl = dom.create("tr", {

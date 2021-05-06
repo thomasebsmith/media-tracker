@@ -82,6 +82,10 @@ class Data {
     return new Data(this.data.slice(n));
   }
 
+  append(row: Row) {
+    return new Data(this.data.concat([row]));
+  }
+
   // Sorts the data, starting by the first (most important)
   //  columns in columnKeys.
   sort(columnKeys: Sort) {
