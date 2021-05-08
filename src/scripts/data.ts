@@ -1,5 +1,5 @@
 import {assert} from "./standard";
-import {getData, setData} from "./storage";
+import {getData, setData, getNextID, setNextID} from "./storage";
 
 interface Row {
   readonly id: number,
@@ -43,6 +43,14 @@ const columnKeys = Object.keys(columns) as (keyof Row)[];
 
 const dataArray = getData();
 const dataIDMap = new Map();
+
+let nextID = getNextID();
+
+function takeID(): number {
+  ++nextID;
+  return nextID - 1;
+}
+
 for (let i = 0; i < dataArray.length; ++i) {
   dataIDMap.set(dataArray[i].id, i);
 }
@@ -61,6 +69,7 @@ function updateRow(row: Row) {
 
 function saveUpdates() {
   setData(dataArray);
+  setNextID(nextID);
 }
 
 class Data {
@@ -118,5 +127,5 @@ class Data {
 
 const rows = new Data();
 
-export {columnKeys, columns, rows};
+export {columnKeys, columns, rows, takeID};
 export type {Column, Row, Sort};

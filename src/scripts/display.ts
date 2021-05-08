@@ -1,4 +1,4 @@
-import {columnKeys, columns, rows, Row, Sort} from "./data";
+import {columnKeys, columns, rows, takeID, Row, Sort} from "./data";
 import * as dom from "./dom";
 import {assert} from "./standard";
 
@@ -6,6 +6,8 @@ const displayColumnKeys = columnKeys.filter(key => columns[key].display);
 const displayColumns = Object.values(columns).filter(col => col.display);
 
 const numHeaderRows = 1;
+
+let dirty = false;
 
 /*
  * Moves the user's selection at most rightOffset cells to the right and
@@ -73,13 +75,37 @@ function createTableCell(
   return colEl;
 }
 
-function addRowForNewEntry(tableEl: HTMLElement) {
+function getRow(rowEl: HTMLElement): Row {
+  const idString = rowEl.dataset.id ?? "";
+  const id = parseInt(idString, 10);
+  assert(Number.isFinite(id));
+
+  const row: Record<string, any> = {id};
+
+  for (let i = 0; i < displayColumnKeys.length; ++i) {
+    const key = displayColumnKeys[i];
+    const cellEl = rowEl.children[i];
+    row[key] = cellEl.textContent;
+  }
+
+  // TODO: Is there a better way to do this?
+  row.rating = parseFloat(row.rating as string);
+  return row as Row;
+}
+
+function addRowForNewEntry(
+  tableEl: HTMLElement,
+  addRow: (row: Row) => void
+) {
   const editRowEl = dom.create("tr", {classes: ["new"]});
   const listener = (event: Event) => {
     assert(event.target instanceof HTMLElement);
     if (event.target.textContent !== "") {
+      editRowEl.dataset.id = takeID().toString();
+      addRow(getRow(editRowEl));
+
       editRowEl.classList.remove("new");
-      addRowForNewEntry(tableEl);
+      addRowForNewEntry(tableEl, addRow);
       editRowEl.removeEventListener("input", listener);
     }
   };
@@ -117,6 +143,16 @@ function display(containerEl: HTMLElement) {
   function addRow(row: Row) {
     dataToShow = dataToShow.append(row);
   }
+  function saveRows() {
+    if (dirty) {
+      dataToShow.update();
+      dirty = false;
+    }
+  }
+  setInterval(() => saveRows(), 10 * 1000);
+  window.addEventListener("beforeunload", () => {
+    saveRows();
+  });
 
   for (const row of dataToShow) {
     const rowEl = dom.create("tr", {
@@ -131,7 +167,7 @@ function display(containerEl: HTMLElement) {
     tableEl.appendChild(rowEl);
   }
 
-  addRowForNewEntry(tableEl);
+  addRowForNewEntry(tableEl, addRow);
   
   containerEl.appendChild(tableEl);
 }
@@ -155,6 +191,9 @@ document.addEventListener("focusin", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  // TODO: This is sub-optimal.
+  dirty = true;
+
   if (event.shiftKey) {
     return;
   }
