@@ -128,6 +128,23 @@ function display(containerEl: HTMLElement) {
   }
   tableEl.appendChild(headerRow);
 
+  tableEl.addEventListener("input", (event) => {
+    if (!(event.target instanceof Node)) {
+      return;
+    }
+
+    const rowEl = dom.findAncestorElement(event.target, "tr");
+    if (rowEl === null) {
+      return;
+    }
+
+    // TODO: This is sub-optimal.
+    dirty = true;
+
+    // TODO: Update this row
+  });
+
+
   // TODO: Make this customizable.
   const sort: Sort = [
     ["rating", true],
@@ -191,9 +208,6 @@ document.addEventListener("focusin", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  // TODO: This is sub-optimal.
-  dirty = true;
-
   if (event.shiftKey) {
     return;
   }
