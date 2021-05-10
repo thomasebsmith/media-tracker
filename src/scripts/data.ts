@@ -55,6 +55,18 @@ for (let i = 0; i < dataArray.length; ++i) {
   dataIDMap.set(dataArray[i].id, i);
 }
 
+function updateRowWithSameID(row: Row) {
+  const index = dataIDMap.get(row.id);
+  assert(index !== undefined);
+  // TODO: Why is this needed??
+  const toUpdate: any = dataArray[index];
+  for (const columnKey of columnKeys) {
+    if (columnKey !== "id") {
+      toUpdate[columnKey] = row[columnKey];
+    }
+  }
+}
+
 function updateRow(row: Row) {
   const index = dataIDMap.get(row.id);
   if (index !== undefined) {
@@ -127,5 +139,5 @@ class Data {
 
 const rows = new Data();
 
-export {columnKeys, columns, rows, takeID};
+export {columnKeys, columns, rows, takeID, updateRowWithSameID};
 export type {Column, Row, Sort};
