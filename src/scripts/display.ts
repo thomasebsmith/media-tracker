@@ -1,4 +1,13 @@
-import {columnKeys, columns, rows, takeID, Row, Sort} from "./data";
+import {
+  columnKeys,
+  columns,
+  register,
+  rows,
+  takeID,
+  updateRowWithSameID,
+  Row,
+  Sort
+} from "./data";
 import * as dom from "./dom";
 import {assert} from "./standard";
 
@@ -137,11 +146,13 @@ function display(containerEl: HTMLElement) {
     if (rowEl === null) {
       return;
     }
+    assert(rowEl instanceof HTMLElement);
 
     // TODO: This is sub-optimal.
     dirty = true;
 
     // TODO: Update this row
+    updateRowWithSameID(getRow(rowEl));
   });
 
 
@@ -158,6 +169,7 @@ function display(containerEl: HTMLElement) {
   let dataToShow = rows.sort(sort).take(maxRows);
 
   function addRow(row: Row) {
+    register(row);
     dataToShow = dataToShow.append(row);
   }
   function saveRows() {

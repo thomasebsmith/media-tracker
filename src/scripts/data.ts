@@ -67,16 +67,19 @@ function updateRowWithSameID(row: Row) {
   }
 }
 
+function register(row: Row) {
+  assert(dataIDMap.get(row.id) === undefined);
+
+  const newIndex = dataArray.push(row) - 1;
+  dataIDMap.set(row.id, newIndex);
+}
+
 function updateRow(row: Row) {
   const index = dataIDMap.get(row.id);
-  if (index !== undefined) {
-    // Clients of this module should *not* replace existing Row objects.
-    // Row objects must be modified in place.
-    assert(dataArray[index] == row);
-  } else {
-    const newIndex = dataArray.push(row) - 1;
-    dataIDMap.set(row.id, newIndex);
-  }
+  assert(index !== undefined);
+  // Clients of this module should *not* replace existing Row objects.
+  // Row objects must be modified in place.
+  assert(dataArray[index] == row);
 }
 
 function saveUpdates() {
@@ -139,5 +142,5 @@ class Data {
 
 const rows = new Data();
 
-export {columnKeys, columns, rows, takeID, updateRowWithSameID};
+export {columnKeys, columns, register, rows, takeID, updateRowWithSameID};
 export type {Column, Row, Sort};
