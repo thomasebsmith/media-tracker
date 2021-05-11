@@ -8,10 +8,26 @@ interface CreateOptions {
   text?: string,
 }
 
-function create(
-  type: string,
+type CreatedElementDict = {
+  "html": HTMLHtmlElement,
+  "base": HTMLBaseElement,
+  "head": HTMLHeadElement,
+  "link": HTMLLinkElement,
+  "td": HTMLTableCellElement,
+  "tr": HTMLTableRowElement,
+  "table": HTMLTableElement,
+  "div": HTMLDivElement,
+};
+
+type CreatedElement<TypeString> =
+  TypeString extends keyof CreatedElementDict ?
+    CreatedElementDict[TypeString] :
+    HTMLElement;
+
+function create<TypeString extends string>(
+  type: TypeString,
   options: CreateOptions = Object.create(null)
-): HTMLElement {
+): CreatedElement<Lowercase<TypeString>> {
   const el = document.createElement(type);
   if (Array.isArray(options.classes)) {
     for (const theClass of options.classes) {
@@ -36,7 +52,7 @@ function create(
   if (typeof options.text === "string") {
     el.textContent = options.text;
   }
-  return el;
+  return el as CreatedElement<Lowercase<TypeString>>;
 }
 
 function findAncestorElement(
