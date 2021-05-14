@@ -1,3 +1,5 @@
+import {lastOfSplit} from "./type-utils";
+
 type CreateData = {[key: string]: string|undefined};
 
 interface CreateOptions {
@@ -85,9 +87,14 @@ type ElementTypeByTagName = {
   "template": HTMLTemplateElement,
 };
 
-type CreatedElement<TypeString> =
+type CreatedElement<TypeString extends string> =
   TypeString extends keyof ElementTypeByTagName ?
     ElementTypeByTagName[TypeString] :
+    HTMLElement;
+
+type SelectedElement<SelectString extends string> =
+  lastOfSplit<SelectString, " "> extends keyof ElementTypeByTagName ?
+    ElementTypeByTagName[lastOfSplit<SelectString, " ">] :
     HTMLElement;
 
 function create<TypeString extends string>(
@@ -163,7 +170,9 @@ function isRightmost(node: Node, inNode: Node): boolean {
   return false;
 }
 
-function select(selector: string): HTMLElement | null {
+function select<SelectString extends string>(
+  selector: SelectString
+): SelectedElement<SelectString> | null {
   return document.querySelector(selector);
 }
 
