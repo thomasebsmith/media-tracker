@@ -8,7 +8,7 @@ interface CreateOptions {
   text?: string,
 }
 
-type CreatedElementDict = {
+type ElementTypeByTagName = {
   "html": HTMLHtmlElement,
   "base": HTMLBaseElement,
   "head": HTMLHeadElement,
@@ -86,8 +86,8 @@ type CreatedElementDict = {
 };
 
 type CreatedElement<TypeString> =
-  TypeString extends keyof CreatedElementDict ?
-    CreatedElementDict[TypeString] :
+  TypeString extends keyof ElementTypeByTagName ?
+    ElementTypeByTagName[TypeString] :
     HTMLElement;
 
 function create<TypeString extends string>(
