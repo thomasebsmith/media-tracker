@@ -6,6 +6,7 @@ interface CreateOptions {
   classes?: string[],
   data?: CreateData,
   editable?: boolean|"true"|"false"|"inherit",
+  id?: string,
   spellcheck?: boolean,
   text?: string,
 }
@@ -118,6 +119,9 @@ function create<TypeString extends string>(
     el.contentEditable = `${options.editable}`;
   } else if (typeof options.editable === "string") {
     el.contentEditable = options.editable;
+  }
+  if (typeof options.id === "string") {
+    el.setAttribute("id", options.id);
   }
   if (typeof options.spellcheck === "boolean") {
     el.spellcheck = options.spellcheck;
