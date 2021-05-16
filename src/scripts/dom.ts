@@ -7,6 +7,7 @@ interface CreateOptions {
   data?: CreateData,
   editable?: boolean|"true"|"false"|"inherit",
   id?: string,
+  popupText?: string,
   spellcheck?: boolean,
   text?: string,
 }
@@ -122,6 +123,9 @@ function create<TypeString extends string>(
   }
   if (typeof options.id === "string") {
     el.setAttribute("id", options.id);
+  }
+  if (typeof options.popupText === "string") {
+    el.setAttribute("title", options.popupText);
   }
   if (typeof options.spellcheck === "boolean") {
     el.spellcheck = options.spellcheck;
