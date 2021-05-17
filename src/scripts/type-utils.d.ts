@@ -1,7 +1,14 @@
+type first<T, Arr extends T[]> =
+  Arr extends [] ?
+    undefined :
+    Arr extends [infer First, ...infer Rest] ?
+      First :
+      T;
+
 type last<T, Arr extends T[]> =
   Arr extends [] ?
     undefined :
-    Arr extends [...infer First, infer Last] ?
+    Arr extends [...infer Rest, infer Last] ?
       Last :
       T;
 
