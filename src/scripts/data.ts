@@ -6,7 +6,7 @@ interface Row {
   type: string,
   title: string,
   creators: string,
-  rating: number,
+  rating: number|null,
 }
 
 interface Column {
@@ -15,6 +15,23 @@ interface Column {
 }
 
 type Sort = [key: keyof Row, descending: boolean][];
+
+function createRow(rowData: Record<string, string>): Row|null {
+  const row: Row = {
+    id: parseInt(rowData.id),
+    type: rowData.type,
+    title: rowData.title,
+    creators: rowData.creators,
+    rating: parseFloat(rowData.rating)
+  };
+  if (!Number.isFinite(row.id)) {
+    return null;
+  }
+  if (!Number.isFinite(row.rating)) {
+    row.rating = null;
+  }
+  return row;
+}
 
 const columns: {[key in keyof Row]: Column} = {
   id: {
@@ -117,9 +134,15 @@ class Data {
     toBeSorted.sort((a, b) => {
       for (const [key, descending] of columnKeys) {
         const reverseMultiplier = descending ? -1 : 1;
-        if (a[key] < b[key]) {
+        if (a[key] === null && b[key] === null) {
+          continue;
+        } else if (a[key] === null) {
           return -1 * reverseMultiplier;
-        } else if (a[key] > b[key]) {
+        } else if (b[key] === null) {
+          return 1 * reverseMultiplier;
+        } else if (a[key]! < b[key]!) {
+          return -1 * reverseMultiplier;
+        } else if (a[key]! > b[key]!) {
           return 1 * reverseMultiplier;
         }
       }
