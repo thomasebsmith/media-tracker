@@ -4,10 +4,10 @@
 Media Tracker is a website for tracking the media that you consume.
 All information is kept on your computer only for your privacy.
 
-## Features (In Progress)
+## Features
  - Record media locally
- - Rate and rank media
- - Visualize your recorded media
+ - Rate and rank media (in progress)
+ - Visualize your recorded media (in progress)
 
 ## Requirements
  - `git`
