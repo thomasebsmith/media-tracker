@@ -9,9 +9,13 @@ interface Row {
   rating: number|null,
 }
 
+// TODO
+type ColumnType = "number"|"string"|"string[]";
+
 interface Column {
   display: boolean,
   name: string,
+  type: ColumnType
 }
 
 type Sort = [key: keyof Row, descending: boolean][];
@@ -37,22 +41,27 @@ const columns: {[key in keyof Row]: Column} = {
   id: {
     display: false,
     name: "ID",
+    type: "number",
   },
   type: {
     display: true,
     name: "Type",
+    type: "string",
   },
   title: {
     display: true,
     name: "Title",
+    type: "string",
   },
   creators: {
     display: true,
     name: "Creators",
+    type: "string[]"
   },
   rating: {
     display: true,
     name: "Rating",
+    type: "number",
   },
 };
 
