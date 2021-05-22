@@ -9,8 +9,20 @@ interface Row {
   rating: number|null,
 }
 
-// TODO
-type ColumnType = "number"|"string"|"string[]";
+interface ArrayColumnType {
+  type: "array",
+  of: ColumnType,
+}
+interface UnionColumnType {
+  type: "union",
+  of: [ColumnType, ColumnType],
+}
+type ColumnType =
+  "number"|
+  "string"|
+  "null"|
+  ArrayColumnType|
+  UnionColumnType;
 
 interface Column {
   display: boolean,
@@ -56,7 +68,10 @@ const columns: {[key in keyof Row]: Column} = {
   creators: {
     display: true,
     name: "Creators",
-    type: "string[]"
+    type: {
+      type: "array",
+      of: "string",
+    },
   },
   rating: {
     display: true,
