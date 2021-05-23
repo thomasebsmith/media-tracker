@@ -24,4 +24,28 @@ type split<ToSplit extends string, Delimiter extends string> =
         [Before, ...split<After, Delimiter>] :
         [ToSplit];
 
-export {last, lastOfSplit, split};
+interface Optional<T> {
+  hasValue: boolean,
+  value: T|null,
+}
+
+function none<T>(): Optional<T> {
+  return {
+    hasValue: false,
+    value: null,
+  };
+}
+
+function some<T>(value: T): Optional<T> {
+  return {
+    hasValue: true,
+    value: value,
+  };
+}
+
+function valueOr<T>(maybe: Optional<T>, ifNone: T): T {
+  return maybe.hasValue ? maybe.value! : ifNone;
+}
+
+export {none, some, valueOr};
+export type {last, lastOfSplit, split, Optional};

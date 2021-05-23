@@ -1,5 +1,6 @@
 import {assert} from "./standard";
 import {getData, setData, getNextID, setNextID} from "./storage";
+import {none, some, Optional} from "./type-utils";
 
 interface Row {
   readonly id: number,
@@ -18,7 +19,8 @@ interface UnionColumnType {
   of: [ColumnType, ColumnType],
 }
 type ColumnType =
-  "number"|
+  "integer"|
+  "float"|
   "string"|
   "null"|
   ArrayColumnType|
@@ -31,6 +33,40 @@ interface Column {
 }
 
 type Sort = [key: keyof Row, descending: boolean][];
+
+function columnFromString<ColumnName extends keyof Row>(
+  string: string,
+  columnName: ColumnName
+): Optional<Row[ColumnName]> {
+  const info = columns[columnName];
+  switch (info.type) {
+    case "integer": {
+      const result = parseInt(string, 10);
+      if (!Number.isFinite(result)) {
+        return none();
+      }
+      return some(result) as Optional<Row[ColumnName]>;
+    }
+    case "float": {
+      const result = parseFloat(string);
+      if (!Number.isFinite(result)) {
+        return none();
+      }
+      return some(result) as Optional<Row[ColumnName]>;
+    }
+    case "string":
+      return some(string) as Optional<Row[ColumnName]>;
+    case "null":
+      return some(null) as Optional<Row[ColumnName]>;
+    default:
+      if (info.type.type === "array") {
+        assert(false && "TODO");
+      } else {
+        assert(info.type.type === "union");
+        assert(false && "TODO");
+      }
+  }
+}
 
 function createRow(rowData: Record<string, string>): Row|null {
   const row: Row = {
@@ -53,7 +89,7 @@ const columns: {[key in keyof Row]: Column} = {
   id: {
     display: false,
     name: "ID",
-    type: "number",
+    type: "integer",
   },
   type: {
     display: true,
@@ -76,7 +112,7 @@ const columns: {[key in keyof Row]: Column} = {
   rating: {
     display: true,
     name: "Rating",
-    type: "number",
+    type: "float",
   },
 };
 
