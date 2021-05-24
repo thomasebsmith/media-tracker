@@ -1,6 +1,7 @@
 import {
   columnKeys,
   columns,
+  columnFromString,
   register,
   rows,
   takeID,
@@ -86,10 +87,10 @@ function createTableCell(
 
 function getRow(rowEl: HTMLElement): Row {
   const idString = rowEl.dataset.id ?? "";
-  const id = parseInt(idString, 10);
-  assert(Number.isFinite(id));
 
-  const row: Record<string, any> = {id};
+  const row: Record<string, any> = {
+    id: idString,
+  };
 
   for (let i = 0; i < displayColumnKeys.length; ++i) {
     const key = displayColumnKeys[i];
@@ -97,8 +98,13 @@ function getRow(rowEl: HTMLElement): Row {
     row[key] = cellEl.textContent;
   }
 
-  // TODO: Is there a better way to do this?
-  row.rating = parseFloat(row.rating as string);
+  for (const key of columnKeys) {
+    const result = columnFromString(row[key], key);
+    // TODO: Better error handling
+    assert(result.hasValue);
+    row[key] = result.value;
+  }
+
   return row as Row;
 }
 

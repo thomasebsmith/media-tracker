@@ -1,6 +1,6 @@
 import {assert} from "./standard";
 import {getData, setData, getNextID, setNextID} from "./storage";
-import {none, some, Optional} from "./type-utils";
+import {none, some, optionalList, Optional} from "./type-utils";
 
 interface Row {
   readonly id: number,
@@ -34,36 +34,67 @@ interface Column {
 
 type Sort = [key: keyof Row, descending: boolean][];
 
+function columnTypeIsArray(
+  columnType: ColumnType
+): columnType is ArrayColumnType {
+  return typeof columnType !== "string" && columnType.type === "array";
+}
+
+function columnTypeIsUnion(
+  columnType: ColumnType
+): columnType is UnionColumnType {
+  return typeof columnType !== "string" && columnType.type === "union";
+}
+
 function columnFromString<ColumnName extends keyof Row>(
   string: string,
   columnName: ColumnName
 ): Optional<Row[ColumnName]> {
-  const info = columns[columnName];
-  switch (info.type) {
+  const type = columns[columnName].type;
+  return columnFromStringImpl(
+    string,
+    type
+  ) as Optional<Row[ColumnName]>;
+}
+
+function columnFromStringImpl(
+  string: string,
+  type: ColumnType
+): Optional<any> {
+  switch (type) {
     case "integer": {
       const result = parseInt(string, 10);
       if (!Number.isFinite(result)) {
         return none();
       }
-      return some(result) as Optional<Row[ColumnName]>;
+      return some(result);
     }
     case "float": {
       const result = parseFloat(string);
       if (!Number.isFinite(result)) {
         return none();
       }
-      return some(result) as Optional<Row[ColumnName]>;
+      return some(result);
     }
     case "string":
-      return some(string) as Optional<Row[ColumnName]>;
+      return some(string);
     case "null":
-      return some(null) as Optional<Row[ColumnName]>;
+      return some(null);
     default:
-      if (info.type.type === "array") {
-        assert(false && "TODO");
+      if (columnTypeIsArray(type)) {
+        const parts = string.split(",");
+        return optionalList(
+          parts.map(part => columnFromStringImpl(part, type.of))
+        );
       } else {
-        assert(info.type.type === "union");
-        assert(false && "TODO");
+        assert(columnTypeIsUnion(type));
+        for (const possibility of type.of) {
+          const result = columnFromStringImpl(string, possibility);
+          if (result.hasValue) {
+            return result;
+          }
+        }
+        return none();
       }
   }
 }
@@ -225,5 +256,13 @@ class Data {
 
 const rows = new Data();
 
-export {columnKeys, columns, register, rows, takeID, updateRowWithSameID};
+export {
+  columnKeys,
+  columns,
+  columnFromString,
+  register,
+  rows,
+  takeID,
+  updateRowWithSameID
+};
 export type {Column, Row, Sort};

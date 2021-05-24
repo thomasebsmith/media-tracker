@@ -47,5 +47,17 @@ function valueOr<T>(maybe: Optional<T>, ifNone: T): T {
   return maybe.hasValue ? maybe.value! : ifNone;
 }
 
-export {none, some, valueOr};
+function optionalList<T>(list: Optional<T>[]): Optional<T[]> {
+  const results: T[] = [];
+  for (const element of list) {
+    if (element.hasValue) {
+      results.push(element.value!);
+    } else {
+      return none();
+    }
+  }
+  return some(results);
+}
+
+export {none, some, optionalList, valueOr};
 export type {last, lastOfSplit, split, Optional};
