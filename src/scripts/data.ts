@@ -99,6 +99,17 @@ function columnFromStringImpl(
   }
 }
 
+function stringFromColumn<ColumnName extends keyof Row>(
+  value: Row[ColumnName],
+  columnName: ColumnName
+) {
+  if (value === null) {
+    return "";
+  } else {
+    return "" + value;
+  }
+}
+
 function createRow(rowData: Record<string, string>): Row|null {
   const row: Row = {
     id: parseInt(rowData.id),
@@ -143,7 +154,10 @@ const columns: {[key in keyof Row]: Column} = {
   rating: {
     display: true,
     name: "Rating",
-    type: "float",
+    type: {
+      type: "union",
+      of: ["float", "null"],
+    },
   },
 };
 
@@ -260,6 +274,7 @@ export {
   columnKeys,
   columns,
   columnFromString,
+  stringFromColumn,
   register,
   rows,
   takeID,

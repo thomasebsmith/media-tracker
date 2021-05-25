@@ -2,6 +2,7 @@ import {
   columnKeys,
   columns,
   columnFromString,
+  stringFromColumn,
   register,
   rows,
   takeID,
@@ -197,7 +198,9 @@ function display(containerEl: HTMLElement) {
     });
 
     for (const key of displayColumnKeys) {
-      rowEl.appendChild(createTableCell(`${row[key]}`));
+      rowEl.appendChild(createTableCell(
+        stringFromColumn(row[key], key)
+      ));
     }
     tableEl.appendChild(rowEl);
   }
