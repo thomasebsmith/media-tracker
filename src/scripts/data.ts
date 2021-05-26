@@ -1,6 +1,6 @@
 import {assert} from "./standard";
 import {getData, setData, getNextID, setNextID} from "./storage";
-import {none, some, optionalList, Optional} from "./type-utils";
+import {none, some, optionalList, Optional} from "./optional";
 
 interface Row {
   readonly id: number,
