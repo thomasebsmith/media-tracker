@@ -5,6 +5,9 @@ type first<T, Arr extends T[]> =
       First :
       T;
 
+type firstOfSplit<ToSplit extends string, Delimiter extends string> =
+  first<string, split<ToSplit, Delimiter>>;
+
 type last<T, Arr extends T[]> =
   Arr extends [] ?
     undefined :
@@ -24,4 +27,4 @@ type split<ToSplit extends string, Delimiter extends string> =
         [Before, ...split<After, Delimiter>] :
         [ToSplit];
 
-export type {last, lastOfSplit, split};
+export type {first, firstOfSplit, last, lastOfSplit, split};
