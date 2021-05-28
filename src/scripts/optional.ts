@@ -1,27 +1,41 @@
-interface None<T> {
-  hasValue: false,
-  value: null,
+type Then<M, T> = (value: T) => M;
+
+class None<T> {
+  get hasValue(): false {
+    return false;
+  }
+
+  get value(): null {
+    return null;
+  }
+
+  bind(then: Then<Optional<T>, T>): Optional<T> {
+    return this;
+  }
 }
 
-interface Some<T> {
-  hasValue: true,
-  value: T,
+class Some<T> {
+  hasValue: true;
+  value: T;
+
+  constructor(value: T) {
+    this.hasValue = true;
+    this.value = value;
+  }
+
+  bind(then: Then<Optional<T>, T>): Optional<T> {
+    return then(this.value);
+  }
 }
 
 type Optional<T> = None<T> | Some<T>;
 
 function none<T>(): None<T> {
-  return {
-    hasValue: false,
-    value: null,
-  };
+  return new None<T>();
 }
 
 function some<T>(value: T): Some<T> {
-  return {
-    hasValue: true,
-    value: value,
-  };
+  return new Some<T>(value);
 }
 
 function valueOr<T>(maybe: Optional<T>, ifNone: T): T {
