@@ -1,4 +1,4 @@
-type Then<M, T> = (value: T) => M;
+import {Then} from "./monad";
 
 class None<T> {
   get hasValue(): false {
@@ -11,6 +11,10 @@ class None<T> {
 
   bind(then: Then<Optional<T>, T>): Optional<T> {
     return this;
+  }
+
+  pure(value: T): Optional<T> {
+    return some(value);
   }
 }
 
@@ -25,6 +29,10 @@ class Some<T> {
 
   bind(then: Then<Optional<T>, T>): Optional<T> {
     return then(this.value);
+  }
+
+  pure(value: T): Optional<T> {
+    return some(value);
   }
 }
 
