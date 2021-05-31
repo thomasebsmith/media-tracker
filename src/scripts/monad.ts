@@ -1,7 +1,7 @@
 type Then<M, T> = (value: T) => M;
 
 interface Monad<T> {
-  bind(then: Then<this, T>): this;
+  bind<U, N extends Monad<U>>(then: Then<N, T>): N;
   pure(value: T): this;
 }
 

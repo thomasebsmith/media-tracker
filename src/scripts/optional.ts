@@ -9,8 +9,8 @@ class None<T> {
     return null;
   }
 
-  bind(then: Then<Optional<T>, T>): Optional<T> {
-    return this;
+  bind<U>(then: Then<Optional<U>, T>): Optional<U> {
+    return none();
   }
 
   pure(value: T): Optional<T> {
@@ -27,7 +27,7 @@ class Some<T> {
     this.value = value;
   }
 
-  bind(then: Then<Optional<T>, T>): Optional<T> {
+  bind<U>(then: Then<Optional<U>, T>): Optional<U> {
     return then(this.value);
   }
 
