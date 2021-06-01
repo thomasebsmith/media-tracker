@@ -1,8 +1,8 @@
-type Then<M, T> = (value: T) => M;
+type Then<T, U> = (value: T) => Monad<U>;
 
 interface Monad<T> {
-  bind<U, N extends Monad<U>>(then: Then<N, T>): N;
-  pure(value: T): this;
+  bind<U>(then: Then<T, U>): Monad<U>;
+  pure(value: T): Monad<T>;
 }
 
 export type {Monad, Then};
