@@ -263,6 +263,12 @@ class Data {
     saveUpdates();
   }
 
+  toJSON() {
+    return {
+      data: this.data,
+    };
+  }
+
   [Symbol.iterator]() {
     return this.data[Symbol.iterator]();
   }
