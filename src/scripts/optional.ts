@@ -9,7 +9,7 @@ class None<T> {
     return null;
   }
 
-  bind<U>(then: Then<T, U>): Monad<U> {
+  bind<U>(then: Then<T, U>): Optional<U> {
     return none<U>();
   }
 
@@ -27,8 +27,8 @@ class Some<T> {
     this.value = value;
   }
 
-  bind<U>(then: Then<T, U>): Monad<U> {
-    return then(this.value);
+  bind<U>(then: Then<T, U>): Optional<U> {
+    return then(this.value) as Optional<U>;
   }
 
   pure(value: T): Optional<T> {
