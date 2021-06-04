@@ -16,6 +16,10 @@ class None<T> {
   pure(value: T): Optional<T> {
     return some(value);
   }
+
+  valueOr(ifNone: T): T {
+    return ifNone;
+  }
 }
 
 class Some<T> {
@@ -34,6 +38,10 @@ class Some<T> {
   pure(value: T): Optional<T> {
     return some(value);
   }
+
+  valueOr(ifNone: T): T {
+    return this.value;
+  }
 }
 
 type Optional<T> = None<T> | Some<T>;
@@ -44,10 +52,6 @@ function none<T>(): None<T> {
 
 function some<T>(value: T): Some<T> {
   return new Some<T>(value);
-}
-
-function valueOr<T>(maybe: Optional<T>, ifNone: T): T {
-  return maybe.hasValue ? maybe.value : ifNone;
 }
 
 function optionalList<T>(list: Optional<T>[]): Optional<T[]> {
@@ -62,5 +66,5 @@ function optionalList<T>(list: Optional<T>[]): Optional<T[]> {
   return some(results);
 }
 
-export {none, some, optionalList, valueOr};
+export {none, some, optionalList};
 export type {Optional};
