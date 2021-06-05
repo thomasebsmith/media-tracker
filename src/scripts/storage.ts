@@ -46,4 +46,21 @@ function setNextID(newNextID: number): void {
   setJSON(nextIDKey, newNextID);
 }
 
+interface Backup {
+  [dataKey]: Row[],
+  [nextIDKey]: number,
+}
+
+function getCommittedBackup(): Backup {
+  return {
+    [dataKey]: getData(),
+    [nextIDKey]: getNextID(),
+  };
+}
+
+function commitBackup(backup: Backup) {
+  setData(backup[dataKey]);
+  setNextID(backup[nextIDKey]);
+}
+
 export {getData, setData, getNextID, setNextID};
