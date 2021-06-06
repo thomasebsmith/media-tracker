@@ -63,4 +63,12 @@ function commitBackup(backup: Backup) {
   setNextID(backup[nextIDKey]);
 }
 
-export {getData, setData, getNextID, setNextID};
+export {
+  getData,
+  setData,
+  getNextID,
+  setNextID,
+  getCommittedBackup,
+  commitBackup
+};
+export type {Backup};
