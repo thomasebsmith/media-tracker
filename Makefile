@@ -47,18 +47,22 @@ $(RELEASE_DIR)/minified: $(RELEASE_DIR)/bundle
 	npx uglifyjs --compress --mangle -o $@/scripts/$(MAIN_SCRIPT).js \
 		-- $</scripts/$(MAIN_SCRIPT).js
 
-$(RELEASE_DIR)/bundle: $(SCRIPTS)
+$(RELEASE_DIR)/bundle: $(SCRIPTS) $(BUILD_DIR)/typecheck
 	rm -rf $@
-	npx tsc
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js
-$(DEBUG_DIR)/bundle: $(SCRIPTS)
+$(DEBUG_DIR)/bundle: $(SCRIPTS) $(BUILD_DIR)/typecheck
 	rm -rf $@
-	npx tsc
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js --debug
+
+$(BUILD_DIR)/typecheck: $(SCRIPTS)
+	rm -f $@
+	npx tsc
+	mkdir -p $(BUILD_DIR)
+	touch $@
 
 .PHONY: clean
 clean:
