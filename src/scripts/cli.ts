@@ -1,4 +1,10 @@
-import {columns, rows} from "./data";
+import {
+  columns,
+  rows,
+  register,
+  takeID,
+  updateRowWithSameID
+} from "./data";
 import {
   getData,
   setData,
@@ -11,6 +17,9 @@ import {
 const cli = Object.freeze({
   columns,
   rows,
+  register,
+  takeID,
+  updateRowWithSameID,
   getData,
   setData,
   getNextID,
