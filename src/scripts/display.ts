@@ -158,7 +158,6 @@ function display(containerEl: HTMLElement) {
     // TODO: This is sub-optimal.
     dirty = true;
 
-    // TODO: Update this row
     updateRowWithSameID(getRow(rowEl));
   });
 
