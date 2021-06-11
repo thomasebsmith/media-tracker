@@ -6,7 +6,8 @@ All information is kept on your computer only for your privacy.
 
 ## Features
  - Record media locally
- - Rate and rank media (in progress)
+ - Rate and rank media
+ - Backup your recorded media (in progress)
  - Visualize your recorded media (in progress)
 
 ## Requirements
