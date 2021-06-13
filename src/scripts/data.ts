@@ -101,30 +101,13 @@ function columnFromStringImpl(
 
 function stringFromColumn<ColumnName extends keyof Row>(
   value: Row[ColumnName],
-  columnName: ColumnName
-) {
+  _: ColumnName
+): string {
   if (value === null) {
     return "";
   } else {
     return "" + value;
   }
-}
-
-function createRow(rowData: Record<string, string>): Row|null {
-  const row: Row = {
-    id: parseInt(rowData.id),
-    type: rowData.type,
-    title: rowData.title,
-    creators: rowData.creators,
-    rating: parseFloat(rowData.rating)
-  };
-  if (!Number.isFinite(row.id)) {
-    return null;
-  }
-  if (!Number.isFinite(row.rating)) {
-    row.rating = null;
-  }
-  return row;
 }
 
 const columns: {[key in keyof Row]: Column} = {
@@ -177,7 +160,7 @@ for (let i = 0; i < dataArray.length; ++i) {
   dataIDMap.set(dataArray[i].id, i);
 }
 
-function updateRowWithSameID(row: Row) {
+function updateRowWithSameID(row: Row): void {
   const index = dataIDMap.get(row.id);
   assert(index !== undefined);
   // TODO: Why is this needed??
@@ -189,7 +172,7 @@ function updateRowWithSameID(row: Row) {
   }
 }
 
-function register(row: Row) {
+function register(row: Row): void {
   assert(dataIDMap.get(row.id) === undefined);
 
   const newIndex = dataArray.push(row) - 1;
@@ -239,15 +222,17 @@ class Data {
     toBeSorted.sort((a, b) => {
       for (const [key, descending] of columnKeys) {
         const reverseMultiplier = descending ? -1 : 1;
-        if (a[key] === null && b[key] === null) {
+        const aVal = a[key];
+        const bVal = b[key];
+        if (aVal === null && bVal === null) {
           continue;
-        } else if (a[key] === null) {
+        } else if (aVal === null) {
           return -1 * reverseMultiplier;
-        } else if (b[key] === null) {
+        } else if (bVal === null) {
           return 1 * reverseMultiplier;
-        } else if (a[key]! < b[key]!) {
+        } else if (aVal < bVal) {
           return -1 * reverseMultiplier;
-        } else if (a[key]! > b[key]!) {
+        } else if (aVal > bVal) {
           return 1 * reverseMultiplier;
         }
       }

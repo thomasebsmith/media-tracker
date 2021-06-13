@@ -4,4 +4,8 @@ function assert(value: boolean, message?: string): asserts value {
   }
 }
 
-export {assert};
+function fatalError(message?: string): never {
+  throw Error(message ?? "Fatal error");
+}
+
+export {assert, fatalError};

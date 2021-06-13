@@ -1,4 +1,4 @@
-import {Monad, Then} from "./monad";
+import {Then} from "./monad";
 
 class None<T> {
   get hasValue(): false {
@@ -9,7 +9,7 @@ class None<T> {
     return null;
   }
 
-  bind<U>(then: Then<T, U>): Optional<U> {
+  bind<U>(_: Then<T, U>): Optional<U> {
     return none<U>();
   }
 
@@ -39,7 +39,7 @@ class Some<T> {
     return some(value);
   }
 
-  valueOr(ifNone: T): T {
+  valueOr(_: T): T {
     return this.value;
   }
 }
@@ -58,7 +58,7 @@ function optionalList<T>(list: Optional<T>[]): Optional<T[]> {
   const results: T[] = [];
   for (const element of list) {
     if (element.hasValue) {
-      results.push(element.value!);
+      results.push(element.value);
     } else {
       return none();
     }

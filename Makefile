@@ -47,16 +47,23 @@ $(RELEASE_DIR)/minified: $(RELEASE_DIR)/bundle
 	npx uglifyjs --compress --mangle -o $@/scripts/$(MAIN_SCRIPT).js \
 		-- $</scripts/$(MAIN_SCRIPT).js
 
-$(RELEASE_DIR)/bundle: $(SCRIPTS) $(BUILD_DIR)/typecheck
+$(RELEASE_DIR)/bundle: $(SCRIPTS) $(BUILD_DIR)/typecheck \
+	$(BUILD_DIR)/lint
 	rm -rf $@
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js
-$(DEBUG_DIR)/bundle: $(SCRIPTS) $(BUILD_DIR)/typecheck
+$(DEBUG_DIR)/bundle: $(SCRIPTS) $(BUILD_DIR)/typecheck $(BUILD_DIR)/lint
 	rm -rf $@
 	npx browserify --extension=.ts $(SCRIPTS_DIR)/$(MAIN_SCRIPT).ts \
 		-t [ babelify --extensions '.ts,.tsx' ] \
 		-o $@/scripts/$(MAIN_SCRIPT).js --debug
+
+$(BUILD_DIR)/lint: $(SCRIPTS)
+	rm -f $@
+	npx eslint $(SCRIPTS) --max-warnings 0
+	mkdir -p $(BUILD_DIR)
+	touch $@
 
 $(BUILD_DIR)/typecheck: $(SCRIPTS)
 	rm -f $@

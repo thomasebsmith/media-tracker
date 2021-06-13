@@ -1,7 +1,7 @@
 type first<T, Arr extends T[]> =
   Arr extends [] ?
     undefined :
-    Arr extends [infer First, ...infer Rest] ?
+    Arr extends [infer First, ...infer _] ?
       First :
       T;
 
@@ -11,7 +11,7 @@ type firstOfSplit<ToSplit extends string, Delimiter extends string> =
 type last<T, Arr extends T[]> =
   Arr extends [] ?
     undefined :
-    Arr extends [...infer Rest, infer Last] ?
+    Arr extends [...infer _, infer Last] ?
       Last :
       T;
 

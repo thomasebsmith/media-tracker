@@ -58,7 +58,7 @@ function getCommittedBackup(): Backup {
   };
 }
 
-function commitBackup(backup: Backup) {
+function commitBackup(backup: Backup): void {
   setData(backup[dataKey]);
   setNextID(backup[nextIDKey]);
 }

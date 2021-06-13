@@ -135,7 +135,7 @@ function addRowForNewEntry(
 
 }
 
-function display(containerEl: HTMLElement) {
+function display(containerEl: HTMLElement): void {
   const tableEl = dom.create("table");
 
   const headerRow = dom.create("tr");

@@ -1,6 +1,7 @@
 import cli from "./cli";
 import display from "./display";
 import * as dom from "./dom";
+import {fatalError} from "./standard";
 
 declare global {
   interface Window {
@@ -9,4 +10,4 @@ declare global {
 }
 
 window.cli = cli;
-display(dom.select(".data")!);
+display(dom.select(".data") ?? fatalError("Could not find .data"));
