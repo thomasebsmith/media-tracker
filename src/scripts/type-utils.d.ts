@@ -1,3 +1,4 @@
+// Statically get the first element of an array type.
 type first<T, Arr extends T[]> =
   Arr extends [] ?
     undefined :
@@ -5,9 +6,11 @@ type first<T, Arr extends T[]> =
       First :
       T;
 
+// Statically get the first element of a string split by a delimeter.
 type firstOfSplit<ToSplit extends string, Delimiter extends string> =
   first<string, split<ToSplit, Delimiter>>;
 
+// Statically get the last element of an array type.
 type last<T, Arr extends T[]> =
   Arr extends [] ?
     undefined :
@@ -15,9 +18,11 @@ type last<T, Arr extends T[]> =
       Last :
       T;
 
+// Statically get the last element of a string split by a delimeter.
 type lastOfSplit<ToSplit extends string, Delimiter extends string> =
   last<string, split<ToSplit, Delimiter>>;
 
+// Statically split a string by a delimeter.
 type split<ToSplit extends string, Delimiter extends string> =
   string extends ToSplit ?
     string[] :
