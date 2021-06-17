@@ -44,16 +44,21 @@ class Some<T> {
   }
 }
 
+// Has methods bind, pure, and valueOr.
 type Optional<T> = None<T> | Some<T>;
 
+// Create an instance of None.
 function none<T>(): None<T> {
   return new None<T>();
 }
 
+// Create an instance of Some holding `value`.
 function some<T>(value: T): Some<T> {
   return new Some<T>(value);
 }
 
+// If all the elements of `list` are not None, return
+// some(the values of the elements of `list`). Else, return None.
 function optionalList<T>(list: Optional<T>[]): Optional<T[]> {
   const results: T[] = [];
   for (const element of list) {
