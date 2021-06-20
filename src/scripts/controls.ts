@@ -6,8 +6,16 @@ function displayControls(controlsEl: HTMLElement): void {
   const saveBackupEl = dom.create("button");
   saveBackupEl.textContent = "Save Backup";
   saveBackupEl.addEventListener("click", () => {
-    console.log(getCommittedBackup());
-    fatalError("NYI");
+    const backup = JSON.stringify(getCommittedBackup());
+    const backupBlob = new Blob([backup], {type: "application/json"});
+    const downloadURL = URL.createObjectURL(backupBlob);
+    const downloadLink = dom.create("a");
+    const isoNow = new Date().toISOString();
+    downloadLink.setAttribute("download", `backup-${isoNow}.json`);
+    downloadLink.setAttribute("href", downloadURL);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   });
   controlsEl.appendChild(saveBackupEl);
 
