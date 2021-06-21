@@ -7,6 +7,13 @@ STATIC_DIR = static
 SRC_DIR = src
 SCRIPTS_DIR = $(SRC_DIR)/scripts
 
+# Static dependencies #
+# =================== #
+STATIC_FILES = $(wildcard $(STATIC_DIR)/**/*.html) \
+			   $(wildcard $(STATIC_DIR)/*.html) \
+			   $(wildcard $(STATIC_DIR)/**/*.css) \
+			   $(wildcard $(STATIC_DIR)/*.css)
+
 # Script dependencies #
 # =================== #
 MAIN_SCRIPT = index
@@ -32,14 +39,14 @@ $(DEBUG_DIR)/final: $(DEBUG_DIR)/static $(DEBUG_DIR)/bundle
 		cp -R "$$src/." $@; \
 	done
 
-$(RELEASE_DIR)/static: $(STATIC_DIR)
+$(RELEASE_DIR)/static: $(STATIC_FILES)
 	rm -rf $@
 	mkdir -p $@
-	cp -R $</. $@
-$(DEBUG_DIR)/static: $(STATIC_DIR)
+	cp -R $(STATIC_DIR)/. $@
+$(DEBUG_DIR)/static: $(STATIC_FILES)
 	rm -rf $@
 	mkdir -p $@
-	cp -R $</. $@
+	cp -R $(STATIC_DIR)/. $@
 
 $(RELEASE_DIR)/minified: $(RELEASE_DIR)/bundle
 	rm -rf $@

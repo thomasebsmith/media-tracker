@@ -5,16 +5,39 @@
   font-family: "Arial", "Helvetica", sans-serif;
 }
 
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
 section:not(:last-child) {
   margin-bottom: 10px;
 }
 
 /* Controls */
-.controls > :not(:last-child) {
-  margin-right: 7px;
+.controls > div {
+  display: inline-block;
 }
 
-button {
+.controls > :not(:last-child) {
+  border-right: 1px solid black;
+  margin-right: 7px;
+  padding-right: 7px;
+}
+
+.controls > div > :not(:last-child) {
+  margin-right: 5px;
+}
+
+button, input[type=button], input[type=file], input[type=reset],
+input[type=submit], .button {
+  background: #EEEEEE;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.9em;
   border: 1px solid lightgray;
   border-radius: 3px;
   padding: 5px;
@@ -65,7 +88,8 @@ td:focus {
     outline-color: #C8C8C8;
   }
 
-  button {
+  button, input[type=button], input[type=file], input[type=reset],
+  input[type=submit], .button {
     background: #444444;
     color: #EEEEEE;
     border-color: #676767;
