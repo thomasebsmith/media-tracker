@@ -23,9 +23,7 @@ section:not(:last-child) {
 }
 
 .controls > :not(:last-child) {
-  border-right: 1px solid black;
   margin-right: 7px;
-  padding-right: 7px;
 }
 
 .controls > div > :not(:last-child) {

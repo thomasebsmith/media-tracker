@@ -1,6 +1,5 @@
 import * as dom from "./dom";
-import {fatalError} from "./standard";
-import {getCommittedBackup, commitBackup} from "./storage";
+import {Backup, getCommittedBackup, commitBackup} from "./storage";
 
 function displayControl(
   controlsEl: HTMLElement,
@@ -45,8 +44,16 @@ function displayControls(controlsEl: HTMLElement): void {
       "accept",
       ".json,application/json,text/json"
     );
-    selectBackupFileEl.addEventListener("input", () => {
-      commitBackup(fatalError("NYI"));
+    selectBackupFileEl.addEventListener("change", async () => {
+      if (selectBackupFileEl.files === null) {
+        return;
+      }
+      const file = selectBackupFileEl.files[0];
+
+      // TODO: Handle errors that occur in JSON.parse.
+      const jsonToLoad = JSON.parse(await file.text()) as Backup;
+
+      commitBackup(jsonToLoad);
     });
     selectBackupFileEl.classList.add("hidden");
     containerEl.appendChild(selectBackupFileEl);
