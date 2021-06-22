@@ -3,5 +3,6 @@
     "@babel/env",
     "@babel/preset-typescript"
   ],
-  "plugins": []
+  "plugins": [],
+  "targets": "cover 95% and supports async-functions"
 }
