@@ -5,6 +5,7 @@ type CreateData = {[key: string]: string|undefined};
 interface CreateOptions {
   classes?: string[],
   data?: CreateData,
+  direction?: "ltr"|"rtl"|"auto",
   editable?: boolean|"true"|"false"|"inherit",
   id?: string,
   popupText?: string,
@@ -115,6 +116,9 @@ function create<TypeString extends string>(
         el.dataset[key] = value;
       }
     }
+  }
+  if (typeof options.direction === "string") {
+    el.dir = options.direction;
   }
   if (typeof options.editable === "boolean") {
     el.contentEditable = `${options.editable}`;
