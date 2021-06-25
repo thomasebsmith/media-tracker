@@ -11,9 +11,10 @@ All information is kept on your computer only for your privacy.
  - Visualize your recorded media (in progress)
 
 ## Requirements
+To build this website, you will need:
  - `git`
  - `npm` and `node`
- - `make`
+ - GNU `make`
 
 ## Quick Start
 ```sh
