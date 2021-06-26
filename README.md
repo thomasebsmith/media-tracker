@@ -13,7 +13,7 @@ All information is kept on your computer only for your privacy.
 ## Requirements
 To build this website, you will need:
  - `git`
- - `npm` and `node`
+ - `npm`
  - GNU `make`
 
 ## Quick Start
@@ -27,7 +27,7 @@ $ python3 -m http.server 8000
 ```
 
 ## Tech Stack
-Media Tracker is written in TypeScript and uses Babel and Browserify
-to compile its code to a static site.
+Media Tracker is written in TypeScript and uses Babel, Browserify, and
+UglifyJS to compile its code to a static site.
 
 Your data is stored using localstorage.
