@@ -45,6 +45,21 @@ section:not(:last-child) {
   min-width: min(75vw, 500px);
 }
 
+.nav-right {
+  padding: 10px 10px 0 10px;
+  text-align: right;
+}
+
+.close {
+  height: 1.5em;
+  width: 1.5em;
+}
+.close::after {
+  bottom: 0.25em;
+  content: "×";
+  position: relative;
+}
+
 /* Controls */
 .controls > div {
   display: inline-block;

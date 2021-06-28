@@ -11,10 +11,18 @@ function showPopup(popupHandler: PopupHandler): void {
   const internalEl = dom.create("div");
   internalEl.classList.add("overlay-internal");
 
+  const closeButtonContainer = dom.create("nav");
+  closeButtonContainer.classList.add("nav-right");
+
+  const closeButton = dom.create("button");
+  closeButton.classList.add("close");
+
   const container = dom.create("div");
   container.classList.add("overlay");
   container.setAttribute("role", "dialog");
 
+  closeButtonContainer.appendChild(closeButton);
+  container.appendChild(closeButtonContainer);
   internalEl.appendChild(container);
   shadowEl.appendChild(internalEl);
   body.appendChild(shadowEl);
@@ -27,6 +35,8 @@ function showPopup(popupHandler: PopupHandler): void {
       closed = true;
     }
   }
+
+  closeButton.addEventListener("click", () => close());
 
   popupHandler(container, close);
 }
