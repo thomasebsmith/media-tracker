@@ -1,5 +1,6 @@
 import * as dom from "./dom";
 import {Backup, getCommittedBackup, commitBackup} from "./storage";
+import {visualizeData} from "./visualize";
 
 function displayControl(
   controlsEl: HTMLElement,
@@ -57,6 +58,13 @@ function displayControls(controlsEl: HTMLElement): void {
     });
     selectBackupFileEl.classList.add("hidden");
     containerEl.appendChild(selectBackupFileEl);
+  });
+
+  displayControl(controlsEl, (containerEl: HTMLElement) => {
+    const visualizeButton = dom.create("button");
+    visualizeButton.textContent = "Visualize";
+    visualizeButton.addEventListener("click", () => visualizeData());
+    containerEl.appendChild(visualizeButton);
   });
 }
 

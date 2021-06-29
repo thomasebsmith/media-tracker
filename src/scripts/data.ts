@@ -203,6 +203,10 @@ class Data {
     }
   }
 
+  get length(): number {
+    return this.data.length;
+  }
+
   take(n: number) {
     return new Data(this.data.slice(0, n));
   }
