@@ -36,6 +36,11 @@ function showPopup(popupHandler: PopupHandler): void {
     }
   }
 
+  shadowEl.addEventListener("click", (event) => {
+    if (event.target === shadowEl || event.target === internalEl) {
+      close();
+    }
+  });
   closeButton.addEventListener("click", () => close());
 
   popupHandler(container, close);
