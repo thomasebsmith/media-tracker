@@ -1,5 +1,11 @@
 import {none, Optional, some} from "./optional";
 
+function *map<T, U>(func: (input: T) => U, iterable: Iterable<T>): Iterable<U> {
+  for (const datum of iterable) {
+    yield func(datum);
+  }
+}
+
 function mean(data: Iterable<number>): number {
   let sum = 0;
   let count = 0;
@@ -41,6 +47,22 @@ function sum(data: Iterable<number>): number {
     theSum += datum;
   }
   return theSum;
+}
+
+function count<T>(data: Iterable<T>): number {
+  // TODO: This can be optimized for arrays.
+  let count = 0;
+  for (const datum of data) {
+    ++count;
+  }
+  return count;
+}
+
+function stdev(data: Iterable<number>): number {
+  const theMean = mean(data);
+  const numerator = sum(map(datum => (datum - theMean) ** 2, data));
+  const denominator = count(data);
+  return Math.sqrt(numerator / denominator);
 }
 
 export {mean, median, sum};
