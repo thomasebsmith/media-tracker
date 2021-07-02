@@ -52,7 +52,7 @@ function sum(data: Iterable<number>): number {
 function count<T>(data: Iterable<T>): number {
   // TODO: This can be optimized for arrays.
   let count = 0;
-  for (const datum of data) {
+  for (const _ of data) {
     ++count;
   }
   return count;
@@ -65,4 +65,4 @@ function stdev(data: Iterable<number>): number {
   return Math.sqrt(numerator / denominator);
 }
 
-export {mean, median, sum};
+export {count, map, mean, median, stdev, sum};
