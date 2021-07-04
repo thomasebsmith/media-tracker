@@ -20,15 +20,21 @@ class None<T> {
   valueOr(ifNone: T): T {
     return ifNone;
   }
+
+  toString(): string {
+    return "none()";
+  }
 }
 
 class Some<T> {
-  hasValue: true;
   value: T;
 
   constructor(value: T) {
-    this.hasValue = true;
     this.value = value;
+  }
+
+  get hasValue(): true {
+    return true;
   }
 
   bind<U>(then: Then<T, U>): Optional<U> {
@@ -41,6 +47,10 @@ class Some<T> {
 
   valueOr(_: T): T {
     return this.value;
+  }
+
+  toString(): string {
+    return `some(${this.value})`;
   }
 }
 
