@@ -6,14 +6,25 @@ function *map<T, U>(func: (input: T) => U, iterable: Iterable<T>): Iterable<U> {
   }
 }
 
-function mean(data: Iterable<number>): number {
+function *filterNulls<T>(iterable: Iterable<T | null>): Iterable<T> {
+  for (const datum of iterable) {
+    if (datum !== null) {
+      yield datum;
+    }
+  }
+}
+
+function mean(data: Iterable<number>): Optional<number> {
   let sum = 0;
   let count = 0;
   for (const datum of data) {
     sum += datum;
     ++count;
   }
-  return sum / count;
+  if (count === 0) {
+    return none();
+  }
+  return some(sum / count);
 }
 
 type CompareFunc<T> = (first: T, second: T) => number;
@@ -58,11 +69,12 @@ function count<T>(data: Iterable<T>): number {
   return count;
 }
 
-function stdev(data: Iterable<number>): number {
-  const theMean = mean(data);
-  const numerator = sum(map(datum => (datum - theMean) ** 2, data));
-  const denominator = count(data);
-  return Math.sqrt(numerator / denominator);
+function stdev(data: Iterable<number>): Optional<number> {
+  return mean(data).bind(theMean => {
+    const numerator = sum(map(datum => (datum - theMean) ** 2, data));
+    const denominator = count(data);
+    return some(Math.sqrt(numerator / denominator));
+  });
 }
 
-export {count, map, mean, median, stdev, sum};
+export {count, filterNulls, map, mean, median, stdev, sum};
