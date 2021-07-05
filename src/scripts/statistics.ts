@@ -77,4 +77,33 @@ function stdev(data: Iterable<number>): Optional<number> {
   });
 }
 
-export {count, filterNulls, map, mean, median, stdev, sum};
+type EqualFunc<T> = (first: T, second: T) => boolean;
+
+function *unique<T>(
+  data: Iterable<T>,
+  equal: EqualFunc<T> | null = null
+): Iterable<T> {
+  if (equal === null) {
+    const previousData: Set<T> = new Set();
+    for (const datum of data) {
+      if (!previousData.has(datum)) {
+        previousData.add(datum);
+        yield datum;
+      }
+    }
+  } else {
+    const previousData: T[] = [];
+
+    outer:
+    for (const datum of data) {
+      for (const prevDatum of previousData) {
+        if (equal(datum, prevDatum)) {
+          continue outer;
+        }
+      }
+      yield datum;
+    }
+  }
+}
+
+export {count, filterNulls, map, mean, median, stdev, sum, unique};
