@@ -1,7 +1,7 @@
 import {rows} from "./data";
 import * as dom from "./dom";
 import {showPopup} from "./popup";
-import {filterNulls, map, mean, median} from "./statistics";
+import {filterNulls, map, mean, median, unique} from "./statistics";
 
 function visualizeData(): void {
   showPopup(container => {
@@ -14,19 +14,26 @@ function visualizeData(): void {
     container.appendChild(description);
 
     const getRatings = () => filterNulls(map(row => row.rating, rows));
-    const meanRatingEl = dom.create("p");
+
     const meanRating = mean(getRatings());
     if (meanRating.hasValue) {
+      const meanRatingEl = dom.create("p");
       meanRatingEl.textContent = `Mean rating: ${meanRating.value}`;
       container.appendChild(meanRatingEl);
     }
 
-    const medianRatingEl = dom.create("p");
     const medianRating = median(getRatings());
     if (medianRating.hasValue) {
+      const medianRatingEl = dom.create("p");
       medianRatingEl.textContent = `Median rating: ${medianRating.value}`;
       container.appendChild(medianRatingEl);
     }
+
+    const typesEl = dom.create("p");
+    const types = [...unique(map(row => row.type, rows))];
+    types.sort();
+    typesEl.textContent = `Media types: ${types.join(", ")}`;
+    container.appendChild(typesEl);
   });
 }
 
