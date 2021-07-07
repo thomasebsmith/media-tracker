@@ -70,9 +70,11 @@ function count<T>(data: Iterable<T>): number {
 }
 
 function stdev(data: Iterable<number>): Optional<number> {
-  return mean(data).bind(theMean => {
-    const numerator = sum(map(datum => (datum - theMean) ** 2, data));
-    const denominator = count(data);
+  // TODO: This could be more efficient using a tee or similar.
+  const dataArray = [...data];
+  return mean(dataArray).bind(theMean => {
+    const numerator = sum(map(datum => (datum - theMean) ** 2, dataArray));
+    const denominator = count(dataArray);
     return some(Math.sqrt(numerator / denominator));
   });
 }

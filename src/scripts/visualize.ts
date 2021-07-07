@@ -1,7 +1,7 @@
 import {rows} from "./data";
 import * as dom from "./dom";
 import {showPopup} from "./popup";
-import {filterNulls, map, mean, median, unique} from "./statistics";
+import {filterNulls, map, mean, median, stdev, unique} from "./statistics";
 
 function visualizeData(): void {
   showPopup(container => {
@@ -27,6 +27,13 @@ function visualizeData(): void {
       const medianRatingEl = dom.create("p");
       medianRatingEl.textContent = `Median rating: ${medianRating.value}`;
       container.appendChild(medianRatingEl);
+    }
+
+    const ratingsStdev = stdev(getRatings());
+    if (ratingsStdev.hasValue) {
+      const ratingsStdevEl = dom.create("p");
+      ratingsStdevEl.textContent = `Ratings standard deviation: ${ratingsStdev.value}`;
+      container.appendChild(ratingsStdevEl);
     }
 
     const typesEl = dom.create("p");
