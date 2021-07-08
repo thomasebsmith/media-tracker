@@ -8,7 +8,7 @@ All information is kept on your computer only for your privacy.
  - Record media locally
  - Rate and rank media
  - Backup your recorded media (in progress)
- - Visualize your recorded media (in progress)
+ - Visualize and view statistics about your recorded media (in progress)
 
 ## Requirements
 To build this website, you will need:
