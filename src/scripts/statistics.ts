@@ -1,11 +1,13 @@
 import {none, Optional, some} from "./optional";
 
+// Applies a function to each element of an iterable.
 function *map<T, U>(func: (input: T) => U, iterable: Iterable<T>): Iterable<U> {
   for (const datum of iterable) {
     yield func(datum);
   }
 }
 
+// Removes all nulls from an iterable.
 function *filterNulls<T>(iterable: Iterable<T | null>): Iterable<T> {
   for (const datum of iterable) {
     if (datum !== null) {
@@ -14,6 +16,7 @@ function *filterNulls<T>(iterable: Iterable<T | null>): Iterable<T> {
   }
 }
 
+// Calculates the mean of an iterable.
 function mean(data: Iterable<number>): Optional<number> {
   let sum = 0;
   let count = 0;
@@ -29,6 +32,9 @@ function mean(data: Iterable<number>): Optional<number> {
 
 type CompareFunc<T> = (first: T, second: T) => number;
 
+// Calculates the median of an iterable. Note that to make this work for
+//  non-numeric data, the first ("left") datum is returned if there are two
+//  middle elements.
 function median<T>(
   data: Iterable<T>,
   compare: CompareFunc<T> | null = null
@@ -52,6 +58,7 @@ function median<T>(
   return some(dataArray[(length - 1) / 2]);
 }
 
+// Calculates the sum of an iterable.
 function sum(data: Iterable<number>): number {
   let theSum = 0;
   for (const datum of data) {
@@ -60,6 +67,7 @@ function sum(data: Iterable<number>): number {
   return theSum;
 }
 
+// Calculates the number of items in an iterable.
 function count<T>(data: Iterable<T>): number {
   // TODO: This can be optimized for arrays.
   let count = 0;
@@ -69,6 +77,7 @@ function count<T>(data: Iterable<T>): number {
   return count;
 }
 
+// Calculates the standard deviation of an iterable.
 function stdev(data: Iterable<number>): Optional<number> {
   // TODO: This could be more efficient using a tee or similar.
   const dataArray = [...data];
@@ -81,6 +90,7 @@ function stdev(data: Iterable<number>): Optional<number> {
 
 type EqualFunc<T> = (first: T, second: T) => boolean;
 
+// Filters an iterable to only its unique elements.
 function *unique<T>(
   data: Iterable<T>,
   equal: EqualFunc<T> | null = null
