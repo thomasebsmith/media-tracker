@@ -3,7 +3,7 @@
 and more!*
 
 Media Tracker is a website for tracking the media that you consume.
-All information is kept on your computer only for your privacy.
+All information is kept on your computer for your privacy.
 
 ## Features
  - Record media locally
