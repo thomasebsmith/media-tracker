@@ -100,6 +100,8 @@ type SelectedElement<SelectString extends string> =
     ElementTypeByTagName[lastOfSplit<SelectString, " ">] :
     HTMLElement;
 
+// Create an element of a specified type. This is an extended and better-typed
+//  version of document.createElement.
 function create<TypeString extends string>(
   type: TypeString,
   options: CreateOptions = Object.create(null)
@@ -140,6 +142,8 @@ function create<TypeString extends string>(
   return el as CreatedElement<Lowercase<TypeString>>;
 }
 
+// Find the first ancestor of `node` that matches `selector`, or return null
+//  if no such ancestor exists.
 function findAncestorElement(
   node: Node,
   selector: string
@@ -154,6 +158,8 @@ function findAncestorElement(
   return null;
 }
 
+// Determines whether `node` is in one of the leftmost elements contained in
+//  `inNode`.
 function isLeftmost(node: Node, inNode: Node): boolean {
   let traversalNode: Node | null = node;
   do {
@@ -168,6 +174,8 @@ function isLeftmost(node: Node, inNode: Node): boolean {
   return false;
 }
 
+// Determines whether `node` is in one of the rightmost elements contained in
+//  `inNode`.
 function isRightmost(node: Node, inNode: Node): boolean {
   let traversalNode: Node | null = node;
   do {
@@ -182,12 +190,16 @@ function isRightmost(node: Node, inNode: Node): boolean {
   return false;
 }
 
+// Selects an element from the document that matches `selector`. This is a
+//  better-typed version of document.querySelector.
 function select<SelectString extends string>(
   selector: SelectString
 ): SelectedElement<SelectString> | null {
   return document.querySelector(selector);
 }
 
+// Selects an element from the document that matches `selector`. This is a
+//  better-typed version of document.querySelectorAll.
 function selectAll(selector: string): HTMLElement[] {
   return Array.from(document.querySelectorAll(selector));
 }
