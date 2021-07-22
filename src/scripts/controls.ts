@@ -2,6 +2,8 @@ import * as dom from "./dom";
 import {Backup, getCommittedBackup, commitBackup} from "./storage";
 import {visualizeData} from "./visualize";
 
+// Display a single control within `controlsEl`. `create` should create any
+//  elements that should end up inside the control.
 function displayControl(
   controlsEl: HTMLElement,
   create: (containerEl: HTMLElement) => void
@@ -11,6 +13,7 @@ function displayControl(
   controlsEl.appendChild(containerEl);
 }
 
+// Display all table controls within `controlsEl`.
 function displayControls(controlsEl: HTMLElement): void {
   displayControl(controlsEl, (containerEl: HTMLElement) => {
     const saveBackupEl = dom.create("button");
