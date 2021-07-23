@@ -32,6 +32,7 @@ interface Column {
   type: ColumnType
 }
 
+// A key by which to sort rows, and whether to sort descending.
 type Sort = [key: keyof Row, descending: boolean][];
 
 function columnTypeIsArray(
@@ -149,17 +150,19 @@ const columnKeys = Object.keys(columns) as (keyof Row)[];
 const dataArray = getData();
 const dataIDMap = new Map();
 
+for (let i = 0; i < dataArray.length; ++i) {
+  dataIDMap.set(dataArray[i].id, i);
+}
+
 let nextID = getNextID();
 
+// Get the next (unused) row ID.
 function takeID(): number {
   ++nextID;
   return nextID - 1;
 }
 
-for (let i = 0; i < dataArray.length; ++i) {
-  dataIDMap.set(dataArray[i].id, i);
-}
-
+// Update the row with this ID.
 function updateRowWithSameID(row: Row): void {
   const index = dataIDMap.get(row.id);
   assert(index !== undefined);
@@ -172,6 +175,7 @@ function updateRowWithSameID(row: Row): void {
   }
 }
 
+// Register a new row.
 function register(row: Row): void {
   assert(dataIDMap.get(row.id) === undefined);
 
@@ -179,6 +183,7 @@ function register(row: Row): void {
   dataIDMap.set(row.id, newIndex);
 }
 
+// Update `row` with some changes.
 function updateRow(row: Row) {
   const index = dataIDMap.get(row.id);
   assert(index !== undefined);
@@ -187,11 +192,13 @@ function updateRow(row: Row) {
   assert(dataArray[index] == row);
 }
 
+// Save updates to existing rows.
 function saveUpdates() {
   setData(dataArray);
   setNextID(nextID);
 }
 
+// A collection of rows (media items).
 class Data {
   data: Row[];
 
