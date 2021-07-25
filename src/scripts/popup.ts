@@ -3,6 +3,7 @@ import {fatalError} from "./standard";
 
 type PopupHandler = (popupContainer: HTMLElement, close: () => void) => void;
 
+// Show a popup. `popupHandler` should create the contents of the popup.
 function showPopup(popupHandler: PopupHandler): void {
   const body = dom.select("body") ?? fatalError("body not found");
   const shadowEl = dom.create("div");
@@ -30,7 +31,6 @@ function showPopup(popupHandler: PopupHandler): void {
   let closed = false;
   function close() {
     if (!closed) {
-      // TODO: Add a transition here
       body.removeChild(shadowEl);
       closed = true;
     }
