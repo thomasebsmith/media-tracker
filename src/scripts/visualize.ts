@@ -3,6 +3,7 @@ import * as dom from "./dom";
 import {showPopup} from "./popup";
 import {filterNulls, map, mean, median, stdev, unique} from "./statistics";
 
+// Show statistics and visualizations of the user's media.
 function visualizeData(): void {
   showPopup(container => {
     const heading = dom.create("h1");
