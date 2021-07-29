@@ -20,12 +20,10 @@ const numHeaderRows = 1;
 
 let dirty = false;
 
-/*
- * Moves the user's selection at most rightOffset cells to the right and
- * at most downOffset cells downward, if the user has a cell selected.
- *
- * Note: Moves may occur by other means, e.g. if the user presses [tab].
- */
+// Move the user's selection at most rightOffset cells to the right and
+// at most downOffset cells downward, if the user has a cell selected.
+//
+// Note: Moves may occur by other means, e.g. if the user presses [tab].
 function move(rightOffset: number, downOffset: number) {
   rightOffset = Math.round(rightOffset);
   downOffset = Math.round(downOffset);
@@ -74,6 +72,7 @@ function move(rightOffset: number, downOffset: number) {
   newCell.focus();
 }
 
+// Create a table cell containing the given text.
 function createTableCell(
   text?: string,
   options?: dom.CreateOptions
@@ -86,6 +85,7 @@ function createTableCell(
   return colEl;
 }
 
+// Get the row data for a given row element.
 function getRow(rowEl: HTMLElement): Row {
   const idString = rowEl.dataset.id ?? "";
 
@@ -109,6 +109,7 @@ function getRow(rowEl: HTMLElement): Row {
   return row as Row;
 }
 
+// Add a new row to tableEl.
 function addRowForNewEntry(
   tableEl: HTMLElement,
   addRow: (row: Row) => void
@@ -135,6 +136,7 @@ function addRowForNewEntry(
 
 }
 
+// Display the main media table in containerEl.
 function display(containerEl: HTMLElement): void {
   const tableEl = dom.create("table");
 
