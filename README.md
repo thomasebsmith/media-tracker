@@ -35,3 +35,7 @@ Media Tracker is written in TypeScript and uses Babel, Browserify, and
 UglifyJS to compile its code to a static site.
 
 Your data is stored using localstorage.
+
+## License
+Media Tracker is licensed under the MIT License. See [LICENSE](./LICENSE) for
+details.
