@@ -36,6 +36,14 @@ UglifyJS to compile its code to a static site.
 
 Your data is stored using localstorage.
 
+## Project Architecture
+The main code for this project is stored in the `src` directory. Specifically,
+anything that needs to be compiled before it becomes part of the final site
+resides in this directory.
+
+Static files are stored in the `static` directory. This is mostly HTML and CSS
+files, which are not compiled.
+
 ## License
 Media Tracker is licensed under the MIT License. See [LICENSE](./LICENSE) for
 details.
