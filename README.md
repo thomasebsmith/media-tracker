@@ -44,6 +44,18 @@ resides in this directory.
 Static files are stored in the `static` directory. This is mostly HTML and CSS
 files, which are not compiled.
 
+### Build Process
+There are five main steps in the build process (four in debug builds):
+1. Typechecking &mdash; TypeScript code is checked and validated.
+2. Bundling &mdash; All TypeScript code is compiled to JavaScript and bundled
+   into a single .js file.
+3. Minifying &mdash; The .js bundle is minified. This only occurs in release
+   builds.
+4. Static copying &mdash; All static files are copied into a temporary build
+   folder.
+5. Finalization &mdash; The .js bundle from step 2 or 3 along with the static
+   files from step 4 are copied into a single folder.
+
 ## License
 Media Tracker is licensed under the MIT License. See [LICENSE](./LICENSE) for
 details.
