@@ -1,0 +1,147 @@
+/* Page-wide styles */
+:root {
+  background: white;
+  color: black;
+  font-family: "Arial", "Helvetica", sans-serif;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+section:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+/* Overlays */
+.overlay-shadow {
+  background: rgba(127, 127, 127, 0.5);
+  bottom: 0;
+  display: table;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.overlay-internal {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.overlay {
+  background: white;
+  border: 1px solid #555555;
+  display: inline-block;
+  min-height: 50vh;
+  min-width: min(75vw, 500px);
+}
+
+.nav-right {
+  padding: 10px 10px 0 10px;
+  text-align: right;
+}
+
+.close {
+  height: 1.5em;
+  width: 1.5em;
+}
+.close::after {
+  bottom: 0.25em;
+  content: "×";
+  position: relative;
+}
+
+/* Controls */
+.controls > div {
+  display: inline-block;
+}
+
+.controls > :not(:last-child) {
+  margin-right: 7px;
+}
+
+.controls > div > :not(:last-child) {
+  margin-right: 5px;
+}
+
+button, input[type=button], input[type=file], input[type=reset],
+input[type=submit], .button {
+  background: #EEEEEE;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.9em;
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr {
+  height: 2em;
+  width: 100%;
+}
+
+th {
+  background: #F0F0F0;
+  cursor: default;
+}
+
+th, td {
+  border: 1px solid lightgray;
+  padding: 5px;
+}
+
+td:focus {
+  outline: 1.5px solid black;
+  outline-offset: -0.75px;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    background: #181818;
+    color: #EEEEEE;
+  }
+
+  .overlay-shadow {
+    background: rgba(100, 100, 100, 0.5);
+  }
+
+  .overlay {
+    background: #222222;
+    border-color: #727272;
+  }
+
+  th {
+    background: #303030;
+  }
+
+  th, td {
+    border-color: #444444;
+  }
+
+  td:focus {
+    outline-color: #C8C8C8;
+  }
+
+  button, input[type=button], input[type=file], input[type=reset],
+  input[type=submit], .button {
+    background: #444444;
+    color: #EEEEEE;
+    border-color: #676767;
+  }
+}
